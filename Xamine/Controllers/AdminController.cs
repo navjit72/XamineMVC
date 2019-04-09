@@ -143,12 +143,13 @@ namespace Xamine.Controllers
         }
 
         //Update Reportee action for GET request
-        public ActionResult UpdateManager(string id)
+        public ActionResult UpdateManager()
         {
 
             return View(_context);
         }
 
+        [HttpPost]
         public ActionResult DeleteManager(string id)
         {
             if (ModelState.IsValid)
@@ -158,7 +159,7 @@ namespace Xamine.Controllers
                     ManagerModel manager = _context.Managers.ToList().SingleOrDefault(m => m.EmpId.Equals(id));
                     if (manager != null)
                     {
-                        _context.Managers.ToList().Remove(manager);
+                        _context.Managers.Remove(manager);
                     }
                 }
                 _context.SaveChanges();
@@ -170,13 +171,42 @@ namespace Xamine.Controllers
             return RedirectToAction("UpdateManager");
         }
 
-        //Update Manager for POST request
-        //[HttpPost]
-        //public ActionResult UpdateManager(string id)
-        //{        
+        [HttpGet]
+        public ActionResult UpdateReporteePartialView(string id)
+        {
+            ReporteeModel reporteeModel = _context.Reportees.SingleOrDefault(m => m.EmpId.Equals(id));
+            return PartialView(reporteeModel);
 
-        //    return View(_context);
-        //}
+        }
+
+        [HttpPost]
+        public ActionResult UpdateReporteePartialView(ReporteeModel reportee)
+        {
+            if (ModelState.IsValid)
+            {
+                if (_context.Reportees.ToList().Count != 0)
+                {
+                    ReporteeModel prevReportee = _context.Reportees.ToList().SingleOrDefault(m => m.EmpId == reportee.EmpId);
+                    if (prevReportee != null)
+                    {
+                        prevReportee.Fname = reportee.Fname;
+                        prevReportee.Lname = reportee.Lname;
+                        prevReportee.Gender = reportee.Gender;
+                        prevReportee.DOB = reportee.DOB;
+                        prevReportee.Contact = reportee.Contact;
+                        prevReportee.Email = reportee.Email;
+
+                    }
+                }
+                _context.SaveChanges();
+
+                //clearing the state
+                ModelState.Clear();
+
+            }
+            return RedirectToAction("UpdateReportee");
+        }
+
 
         //Update Reportee action for GET request
         public ActionResult UpdateReportee()
@@ -185,10 +215,26 @@ namespace Xamine.Controllers
             return View(_context);
         }
 
-        //Update Reportee for POST request
-        public ActionResult UpdateReportee(ReporteeModel reportee)
+        [HttpPost]
+        public ActionResult DeleteReportee(string id)
         {
-            return View(_context);
+            if (ModelState.IsValid)
+            {
+                if (_context.Reportees.ToList().Count != 0)
+                {
+                    ReporteeModel reportee = _context.Reportees.ToList().SingleOrDefault(m => m.EmpId.Equals(id));
+                    if (reportee != null)
+                    {
+                        _context.Reportees.Remove(reportee);
+                    }
+                }
+                _context.SaveChanges();
+
+                //clearing the state
+                ModelState.Clear();
+
+            }
+            return RedirectToAction("UpdateReportee");
         }
 
         //Logout action

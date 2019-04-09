@@ -12,7 +12,6 @@
     p.ex1 {
         margin-top: 25px;
     }
-
 </style>
 
 <div class="container-fluid admin-container">
@@ -51,25 +50,36 @@
 
 
     <!--Table to display project details-->
-    <table class="table table-responsive table-hover table-striped">
-        <tr class="info">
-            <th>Project Id </th>
-            <th>Project Name </th>
-            <th>Project Description </th>
-            <th>Project Status </th>
-            <th>Project Progress</th>
+    <table id="projects" class="table table-responsive table-hover table-striped">
+        <thead>
+            <tr class="info">
+                <th>Project Id </th>
+                <th>Project Name </th>
+                <th>Project Description </th>
+                <th>Project Status </th>
+                <th>Project Progress</th>
 
-        </tr>
-        @foreach (var d in Model.Projects)
-        {
-            <tr>
-                <td>@d.ProjectId</td>
-                <td>@d.Name</td>
-                <td>@d.Description</td>
-                <td>@d.Status</td>
-                <td>@d.Progress</td>
             </tr>
-        }
-
+        </thead>
+        <tbody>
+            @foreach (var d in Model.Projects)
+            {
+                <tr>
+                    <td>@d.ProjectId</td>
+                    <td>@d.Name</td>
+                    <td>@d.Description</td>
+                    <td>@d.Status</td>
+                    <td>@d.Progress</td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
+@section scripts
+    {
+    <script>
+        $(document).ready(function () {
+            $("#projects").DataTable();
+        });
+    </script>
+}
