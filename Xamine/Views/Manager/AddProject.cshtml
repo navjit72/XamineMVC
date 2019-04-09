@@ -1,0 +1,66 @@
+﻿@*Author : Navjit Kaur*@
+
+@model Xamine.Models.ProjectModel
+@{
+    ViewBag.Title = "AddProject";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+
+<center> <h2>Add Project</h2> </center>
+
+@*Form for submitting the request to add new project*@
+@using (Html.BeginForm("AddProject", "Manager", FormMethod.Post, new { @class = "partialforms" }))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Progress, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Progress, new { @class = "form-control", @type = "number" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Status, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Status, new { @class = "form-control" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+@*Link to Manager Dashboard*@
+<div>
+    @Html.ActionLink("Back to Dashboard", "Dashboard")
+</div>
+

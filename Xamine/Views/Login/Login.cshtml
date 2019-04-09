@@ -1,0 +1,93 @@
+﻿@*Author : Navjit Kaur*@
+
+@model Xamine.ViewModels.Login_ChangePasswordViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "../Shared/_LoginLayout.cshtml";
+}
+
+<link rel="stylesheet"
+      type="text/css"
+      href="~/Content/login/login.css" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<div class="container-fluid h-100">
+    <div class="container1">
+
+        @*Form for resetting the password*@
+        @using (Html.BeginForm("Login", "Login", FormMethod.Post, new { @class = "changepass" }))
+        {
+            <h3>RESET PASSWORD</h3>
+            <p>
+                Just enter your employee Id, <br />
+                your current and new password.
+            </p>
+            @Html.TextBoxFor(e => e.changePasswordModel.EmpId, new { @class = "empId", @placeholder = "Insert Employee Id" })
+            @Html.ValidationMessageFor(e => e.changePasswordModel.EmpId, "", new { @class = "text-danger", id = "changeId" })
+
+            @Html.TextBoxFor(e => e.changePasswordModel.Password, new { @class = "oldPass", @type = "password", @placeholder = "Insert old Password" })
+            @Html.ValidationMessageFor(e => e.changePasswordModel.Password, "", new { @class = "text-danger", id = "changeId" })
+
+            @Html.TextBoxFor(e => e.changePasswordModel.NewPassword, new { @class = "newPass", @type = "password", @placeholder = "New Password" })
+            @Html.ValidationMessageFor(e => e.changePasswordModel.NewPassword, "", new { @class = "text-danger", id = "changeId" })
+
+            @Html.TextBoxFor(e => e.changePasswordModel.ConfirmPassword, new { @class = "verifyPass", @type = "password", @placeholder = "Confirm Password" })
+            @Html.ValidationMessageFor(e => e.changePasswordModel.ConfirmPassword, "", new { @class = "text-danger", id = "changeId" })
+
+            
+            <p id="changeId" style="color:red">@(Model.changePasswordModel.Error.IsEmpty() ? "" : Model.changePasswordModel.Error)</p>
+
+            <button class="form-btn sx back" type="button">Back</button>
+            <button class="form-btn dx save" type="submit" name="SaveButton" id="savebutton">Save</button>
+        }
+
+        @*Form for logging in*@
+
+        @using (Html.BeginForm("Login", "Login", FormMethod.Post, new { @class = "signIn" }))
+        {
+
+            <h3>WELCOME<br />BACK !</h3>
+            <br /><br />
+            @Html.TextBoxFor(e => e.loginModel.EmpId, new { @class = "w100", @placeholder = "Insert Employee Id" })
+            @Html.ValidationMessageFor(e => e.loginModel.EmpId, "", new { @class = "text-danger" })
+
+            @Html.TextBoxFor(e => e.loginModel.Password, new { @class = "password", @type = "password", @placeholder = "Insert Password" })
+            @Html.ValidationMessageFor(e => e.loginModel.Password, "", new { @class = "text-danger" })
+
+            <p style="color:red">@(Model.loginModel.Error.IsEmpty() ? "" : Model.loginModel.Error)</p>
+
+            <button class="form-btn sx resetPass" type="button">Reset Login</button>
+            <button class="form-btn dx login" type="submit" name="LoginButton">Login</button>
+        }
+
+    </div>
+</div>
+
+<script>
+
+    if (($("#changeId").text() !== "")) {
+        $(".changepass").addClass("active-dx");
+        $(".signIn").addClass("inactive-sx");
+        $(".signIn").removeClass("active-sx");
+        $(".changepass").removeClass("inactive-dx");
+    }
+
+    //To bring the reset password form at the front
+    $(".resetPass").click(function () {
+        $(".changepass").addClass("active-dx");
+        $(".signIn").addClass("inactive-sx");
+        $(".signIn").removeClass("active-sx");
+        $(".changepass").removeClass("inactive-dx");
+    });
+
+
+    //To bring the log in form back at the front
+    $(".back").click(function () {
+        $(".signIn").addClass("active-sx");
+        $(".changepass").addClass("inactive-dx");
+        $(".changepass").removeClass("active-dx");
+        $(".signIn").removeClass("inactive-sx");
+    });
+
+</script>

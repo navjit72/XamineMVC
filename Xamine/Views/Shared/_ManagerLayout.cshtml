@@ -1,0 +1,83 @@
+﻿@*Author : Navjit Kaur*@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - XAMINE</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+
+    @*Manager Layout Navigation*@
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("XAMINE", "Dashboard", "Manager", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Project
+                        </a>
+                        <div class="dropdown-menu">
+                            @Html.ActionLink("Add", "AddProject", new { @class = "dropdown-item" })
+                            <div class="dropdown-divider"></div>
+                            @Html.ActionLink("Update", "UpdateProject", new { @class = "dropdown-item" })
+                            <div class="dropdown-divider"></div>
+                            @Html.ActionLink("Delete", "DeleteProject", new { @class = "dropdown-item" })
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Reportee
+                        </a>
+                        <div class="dropdown-menu">
+                            @Html.ActionLink("Task Assignment", "AssignTask", new { @class = "dropdown-item" })
+                            <div class="dropdown-divider"></div>
+                            @Html.ActionLink("Ratings", "RateReportee", new { @class = "dropdown-item" })
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Statistics
+                        </a>
+                        <div class="dropdown-menu">
+                            @Html.ActionLink("Project", "ProjectStatistics", new { @class = "dropdown-item" })
+                            <div class="dropdown-divider"></div>
+                            @Html.ActionLink("Reportee", "ReporteeStatistics", new { @class = "dropdown-item" })
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        @Html.ActionLink("Log Out", "Logout")
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    @*Container for rest of the view and footer*@
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - XAMINE</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

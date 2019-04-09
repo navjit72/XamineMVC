@@ -1,0 +1,63 @@
+﻿/*Author : Navjit Kaur*/
+
+body {
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    height: 100%;
+    width: 100%;
+    margin-top: 5%;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+.admin-container {
+    width: 80%;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/*Add mnaager, Add Reportee, Add Project forms*/
+.partialforms {
+    width: 40%;
+    margin: 0 auto;
+}
+
+/*carousel on manager's dashboard*/
+.carousel-inner > .item > img, .carousel-inner > .item > a > img {
+    width: 100%;
+}
+
+/*carousel indicators in the center*/
+.carousel .left > span,
+.carousel .right > span {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/*carousel caption in the center*/
+.carousel-caption {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.carousel .right > span {
+    left: auto;
+    right: 20px;
+}

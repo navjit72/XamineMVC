@@ -1,0 +1,143 @@
+﻿@*Author : Navjit Kaur*@
+
+@model Xamine.Models.ApplicationDbContext
+
+@{
+    ViewBag.Title = "UpdateManager";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<center> <h2>Manager Details</h2> </center>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+    function createModal(url) {
+       
+        $("#modelContent").load(url, function () {
+            $("#exampleModal").modal("show");
+
+        })
+    }
+
+    //$().ready(function () {
+
+    //    $('button').click(function () {
+
+    //        var eId, eFname, eLname, eEmail, eContact, eDOB, eGender;
+
+    //        //Get the children of the selected <tr>
+
+    //        var selectedTds = $($($(this).parent()).parent()).html();
+
+    //        $(selectedTds).each(function (index) {
+
+    //            //This for each loop extracts the neccessary values
+
+    //            if ($(this).is("#eId")) {
+
+    //                eId = $(this).text();
+
+    //            }
+
+    //            if ($(this).is("#eFname")) {
+
+    //                eFname = $(this).text();
+
+    //            }
+
+    //            if ($(this).is("#eLname")) {
+
+    //                eLname = $(this).text();
+
+    //            }
+
+    //            if ($(this).is("#eEmail")) {
+
+    //                eEmail = $(this).text();
+
+    //            }
+
+    //            if ($(this).is("#eContact")) {
+
+    //                eContact = $(this).text();
+
+    //            }
+
+    //            if ($(this).is("#eDOB")) {
+
+    //                eDOB = $(this).text();
+
+    //            }
+
+    //            if ($(this).is("#eGender")) {
+
+    //                eGender = $(this).text();
+
+    //            }
+
+    //        })
+
+    //        $('#empId').val(eId);
+    //        $('#fname').val(eFname);
+    //        $('#lname').val(eLname);
+    //        $('#email').val(eEmail);
+    //        $('#contact').val(parseInt(eContact));
+    //        $('#dob').val(eDOB);
+    //        $('#gender').val(eGender);
+    //    })
+
+    //});
+</script>
+
+@*Form for submitting the request to add new manager*@
+@using (Html.BeginForm("UpdateManagerPartialView", "Admin", FormMethod.Post, new { @class = "partialforms" }))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    <div>
+        <table class="table table-responsive table-striped">
+            <tr>
+                <th>EmpId</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>DOB</th>
+                <th>Gender</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            @foreach (var manager in Model.Managers)
+            {
+                <tr>
+                    <td id="eId">@manager.EmpId</td>
+                    <td id="eFname">@manager.Fname</td>
+                    <td id="eLname">@manager.Lname</td>
+                    <td id="eEmail">@manager.Email</td>
+                    <td id="eContact">@manager.Contact</td>
+                    <td id="eDOB">@manager.DOB.Value.ToString("dd/MM/yyyy")</td>
+                    <td id="eGender">@manager.Gender</td>
+                    <td><a class="btn btn-default" data-toggle="modal" data-target="#exampleModal" id="@manager.EmpId" onclick="createModal('@Url.Action("UpdateManagerPartialView", "Admin" , new {id=manager.EmpId })')"><i class="glyphicon glyphicon-edit"/></a></td>
+                    <td><a class="btn btn-default" name="Delete" href="@(Url.Action("DeleteManager", "Admin" , new {id=manager.EmpId }))"><i class="glyphicon glyphicon-trash" /></a></td>
+                </tr>
+            }
+        </table>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="exampleModalLabel">Update Details</h2>
+                    </div>
+                    <div class="modal-body" id="modelContent">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

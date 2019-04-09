@@ -1,0 +1,185 @@
+﻿@*Author : Navjit Kaur*@
+
+@model Xamine.Models.ApplicationDbContext
+
+@{
+    ViewBag.Title = "UpdateReportee";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<center> <h2>Reportee Details</h2> </center>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $().ready(function () {
+
+        $('button').click(function () {
+
+            var eId, eFname, eLname, eEmail, eContact, eDOB, eGender;
+
+            //Get the children of the selected <tr>
+
+            var selectedTds = $($($(this).parent()).parent()).html();
+
+            $(selectedTds).each(function (index) {
+
+                //This for each loop extracts the neccessary values
+
+                if ($(this).is("#eId")) {
+
+                    eId = $(this).text();
+
+                }
+
+                if ($(this).is("#eFname")) {
+
+                    eFname = $(this).text();
+
+                }
+
+                if ($(this).is("#eLname")) {
+
+                    eLname = $(this).text();
+
+                }
+
+                if ($(this).is("#eEmail")) {
+
+                    eEmail = $(this).text();
+
+                }
+
+                if ($(this).is("#eContact")) {
+
+                    eContact = $(this).text();
+
+                }
+
+                if ($(this).is("#eDOB")) {
+
+                    eDOB = $(this).text();
+
+                }
+
+                if ($(this).is("#eGender")) {
+
+                    eGender = $(this).text();
+
+                }
+
+            })
+
+            $('#empId').val(eId);
+            $('#fname').val(eFname);
+            $('#lname').val(eLname);
+            $('#email').val(eEmail);
+            $('#contact').val(parseInt(eContact));
+            $('#dob').val(eDOB);
+            $('#gender').val(eGender);
+        })
+
+    });
+</script>
+
+@*Form for submitting the request to add new manager*@
+@using (Html.BeginForm("UpdateReportee", "Admin", FormMethod.Post, new { @class = "partialforms" }))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    <div>
+        <table class="table table-responsive table-striped">
+            <tr>
+                <th>EmpId</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>DOB</th>
+                <th>Gender</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            @foreach (var reportee in Model.Reportees)
+            {
+                <tr>
+                    <td id="eId">@reportee.EmpId</td>
+                    <td id="eFname">@reportee.Fname</td>
+                    <td id="eLname">@reportee.Lname</td>
+                    <td id="eEmail">@reportee.Email</td>
+                    <td id="eContact">@reportee.Contact</td>
+                    <td id="eDOB">@reportee.DOB.Value.ToString("dd/MM/yyyy")</td>
+                    <td id="eGender">@reportee.Gender</td>
+                    <td><button type="button" class="glyphicon glyphicon-edit" data-toggle="modal" data-target="#exampleModal" id="@manager.EmpId"></button></td>
+                    <td><button type="submit" class="glyphicon glyphicon-trash" name="Delete"></button></td>
+                </tr>
+            }
+        </table>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="exampleModalLabel">Update Details</h2>
+
+                    </div>
+                    <div class="modal-body">
+                        @using (Html.BeginForm("UpdateReportee", "Admin", FormMethod.Post, new { @class = "partialforms" }))
+                        {
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">EmpId</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" id="empId" disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">First Name</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" id="fname" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Last Name</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" id="lname" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Email</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" id="email" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Contact</label>
+                                    <div class="col-md-10">
+                                        <input type="number" class="form-control" id="contact" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">DOB</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" id="dob" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Gender</label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" id="gender" />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" name="Save">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+

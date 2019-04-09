@@ -1,0 +1,75 @@
+﻿@*Author : Navjit Kaur*@
+
+@model Xamine.Models.ApplicationDbContext
+
+@{
+    ViewBag.Title = "AdminDashboard";
+    Layout = "../Shared/_AdminLayout.cshtml";
+}
+
+
+<style>
+    p.ex1 {
+        margin-top: 25px;
+    }
+
+</style>
+
+<div class="container-fluid admin-container">
+    <!--Panels-->
+    <p class="ex1">
+        <div class="row">
+            <div class="col-lg-4">
+                <!--Panel 1 (for number of reportees) Start-->
+                <div class="panel panel-info">
+
+                    <div class="panel-body"> <img src="~/images/User.png" width="50" height="50" /> @Model.Reportees.ToList().Count </div>
+                    <div class="panel-heading">REPORTEES</div>
+                </div>
+            </div>
+            <!--Panel 1 End-->
+            <!--Panel 2 (for number of managers) Start-->
+            <div class="col-lg-4">
+                <div class="panel panel-info">
+
+                    <div class="panel-body"> <img src="~/images/User.png" width="50" height="50" /> @Model.Managers.ToList().Count </div>
+                    <div class="panel-heading">MANAGERS</div>
+                </div>
+            </div>
+            <!--Panel 2 End-->
+            <!--Panel 3 (for number of projects) Start-->
+            <div class="col-lg-4">
+                <div class="panel panel-info">
+                    <div class="panel-body"> <img src="~/images/Project.png" width="50" height="50" /> @Model.Projects.ToList().Count </div>
+                    <div class="panel-heading">PROJECTS</div>
+                </div>
+            </div>
+            <!--Panel 3 End-->
+        </div>
+        <!--Panel Group End-->
+    </p>
+
+
+    <!--Table to display project details-->
+    <table class="table table-responsive table-hover table-striped">
+        <tr class="info">
+            <th>Project Id </th>
+            <th>Project Name </th>
+            <th>Project Description </th>
+            <th>Project Status </th>
+            <th>Project Progress</th>
+
+        </tr>
+        @foreach (var d in Model.Projects)
+        {
+            <tr>
+                <td>@d.ProjectId</td>
+                <td>@d.Name</td>
+                <td>@d.Description</td>
+                <td>@d.Status</td>
+                <td>@d.Progress</td>
+            </tr>
+        }
+
+    </table>
+</div>
