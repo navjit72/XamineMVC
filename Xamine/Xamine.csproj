@@ -275,6 +275,7 @@
     <Content Include="Views\Admin\UpdateManager.cshtml" />
     <Content Include="Views\Admin\UpdateManagerPartialView.cshtml" />
     <Content Include="Views\Admin\UpdateReportee.cshtml" />
+    <Content Include="Views\Admin\UpdateReporteePartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
