@@ -26,33 +26,37 @@
     <hr />
     <div>
         <table id="managers" class="table table-responsive table-striped">
-            <tr>
-                <th>EmpId</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Contact</th>
-                <th>DOB</th>
-                <th>Gender</th>
-                <th>Update</th>
-                <th>Delete</th>
-            </tr>
-            @foreach (var reportee in Model.Reportees)
-            {
+            <thead>
                 <tr>
-                    <td id="eId">@reportee.EmpId</td>
-                    <td id="eFname">@reportee.Fname</td>
-                    <td id="eLname">@reportee.Lname</td>
-                    <td id="eEmail">@reportee.Email</td>
-                    <td id="eContact">@reportee.Contact</td>
-                    <td id="eDOB">@reportee.DOB.Value.ToString("dd/MM/yyyy")</td>
-                    <td id="eGender">@reportee.Gender</td>
-                    <td><a class="btn btn-default" data-toggle="modal" data-target="#exampleModal" id="@reportee.EmpId" onclick="createModal('@Url.Action("UpdateReporteePartialView", "Admin" , new {id=reportee.EmpId })')"><i class="glyphicon glyphicon-edit" /></a></td>
-                    <td>
-                        <a data-manager-id="@reportee.EmpId" class="btn btn-default glyphicon glyphicon-trash js-delete" name="Delete"></a>
-                    </td>
+                    <th>EmpId</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>DOB</th>
+                    <th>Gender</th>
+                    <th>Update</th>
+                    <th>Delete</th>
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @foreach (var reportee in Model.Reportees)
+                {
+                    <tr>
+                        <td id="eId">@reportee.EmpId</td>
+                        <td id="eFname">@reportee.Fname</td>
+                        <td id="eLname">@reportee.Lname</td>
+                        <td id="eEmail">@reportee.Email</td>
+                        <td id="eContact">@reportee.Contact</td>
+                        <td id="eDOB">@reportee.DOB.Value.ToString("dd/MM/yyyy")</td>
+                        <td id="eGender">@reportee.Gender</td>
+                        <td><a class="btn btn-default" data-toggle="modal" data-target="#exampleModal" id="@reportee.EmpId" onclick="createModal('@Url.Action("UpdateReporteePartialView", "Admin" , new {id=reportee.EmpId })')"><i class="glyphicon glyphicon-edit" /></a></td>
+                        <td>
+                            <a data-manager-id="@reportee.EmpId" class="btn btn-default glyphicon glyphicon-trash js-delete" name="Delete"></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
         </table>
 
         <!-- Modal -->
@@ -77,17 +81,22 @@
     {
         <script>
             $(document).ready(function () {
-                $("#managers .js-delete").on("click", function () {
+                $("#managers").DataTable();
+
+                $("#managers").on("click",".js-delete", function () {
                     var buttonRef = $(this);
-                    if (confirm("Are you sure you want to delete this reportee?")) {
-                        $.ajax({
-                            url: "/Admin/DeleteReportee/" + buttonRef.attr("data-manager-id"),
-                            method: "POST",
-                            success: function () {
-                                buttonRef.parents("tr").remove();
-                            }
-                        });
-                    }
+                    bootbox.confirm("Are you sure you want to delete this reportee?", function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: "/Admin/DeleteReportee/" + buttonRef.attr("data-manager-id"),
+                                method: "POST",
+                                success: function () {
+                                    buttonRef.parents("tr").remove();
+                                }
+                            });
+                        }
+                    });
+                    
                 });
             });
         </script>
