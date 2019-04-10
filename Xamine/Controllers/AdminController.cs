@@ -13,6 +13,7 @@ namespace Xamine.Controllers
     {
 
         private ApplicationDbContext _context;
+        private static AdminModel currentAdmin;
 
         public AdminController()
         {
@@ -22,7 +23,11 @@ namespace Xamine.Controllers
         //Admin Dashboard
         public ActionResult AdminDashboard()
         {
-
+            if (currentAdmin == null)
+            {
+                string currentAdminId = TempData["EmpId"].ToString();
+                currentAdmin = _context.Admins.SingleOrDefault(a => a.EmpId.Equals(currentAdminId));
+            }
             return View(_context);
         }
 

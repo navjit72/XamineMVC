@@ -186,6 +186,14 @@
     <Compile Include="Migrations\201904091607205_InitialModel.Designer.cs">
       <DependentUpon>201904091607205_InitialModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904100554396_ProjectPictureAdded.cs" />
+    <Compile Include="Migrations\201904100554396_ProjectPictureAdded.Designer.cs">
+      <DependentUpon>201904100554396_ProjectPictureAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904101424273_TaskDetailsAdded.cs" />
+    <Compile Include="Migrations\201904101424273_TaskDetailsAdded.Designer.cs">
+      <DependentUpon>201904101424273_TaskDetailsAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminModel.cs" />
@@ -471,6 +479,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201904091607205_InitialModel.resx">
       <DependentUpon>201904091607205_InitialModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904100554396_ProjectPictureAdded.resx">
+      <DependentUpon>201904100554396_ProjectPictureAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904101424273_TaskDetailsAdded.resx">
+      <DependentUpon>201904101424273_TaskDetailsAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -46,9 +46,7 @@ namespace Xamine.Controllers
         {
             if (Request.Form["LoginButton"] != null)
             {
-                string messages = string.Join("; ", ModelState.Values
-                                        .SelectMany(x => x.Errors)
-                                        .Select(x => x.ErrorMessage));
+
                 //if validations are valid
                 if (ModelState.IsValid)
                 {
@@ -60,8 +58,7 @@ namespace Xamine.Controllers
                         {
                             if (admin.Password.Equals(viewModel.loginModel.Password))
                             {
-                                //loginModel.Designation = "Admin";
-                                //TempData["contextModel"] = _context;
+                                TempData["EmpId"] = admin.EmpId;
                                 return RedirectToAction("AdminDashboard", "Admin");
                             }
                             else
@@ -76,9 +73,7 @@ namespace Xamine.Controllers
                             viewModel.loginModel.Error = "Admin with given Id does not exist";
 
                         }
-                        messages = string.Join("; ", ModelState.Values
-                                        .SelectMany(x => x.Errors)
-                                        .Select(x => x.ErrorMessage));
+
                     }
                     else if (viewModel.loginModel.EmpId.ElementAt(0) == 'M')
                     {
@@ -87,7 +82,7 @@ namespace Xamine.Controllers
                         {
                             if (manager.Password.Equals(viewModel.loginModel.Password))
                             {
-                                //loginModel.Designation = "Manager";
+                                TempData["EmpId"] = manager.EmpId;
                                 return RedirectToAction("Dashboard", "Manager");
                             }
                             else
@@ -109,7 +104,7 @@ namespace Xamine.Controllers
                         {
                             if (reportee.Password.Equals(viewModel.loginModel.Password))
                             {
-                                //loginModel.Designation = "Reportee";
+                                TempData["EmpId"] = reportee.EmpId;
                                 return RedirectToAction("Dashboard", "Reportee");
                             }
                             else
@@ -137,8 +132,8 @@ namespace Xamine.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //if (viewModel.changePasswordModel.NewPassword.Equals(viewModel.changePasswordModel.ConfirmPassword))
-                    //{
+
+
                     //checking the type of user trying to login
                     if (viewModel.changePasswordModel.EmpId.ElementAt(0) == 'A')
                     {

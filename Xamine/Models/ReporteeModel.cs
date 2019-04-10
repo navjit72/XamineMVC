@@ -19,6 +19,9 @@ namespace Xamine.Models
 
         public int HoursWorked { get; set; }
 
+        public string TaskAssigned { get; set; }
+
+        public string TaskPriority { get; set; }
 
     }
 }

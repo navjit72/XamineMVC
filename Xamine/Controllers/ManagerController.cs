@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,6 +14,7 @@ namespace Xamine.Controllers
     {
 
         private ApplicationDbContext _context;
+        private static ManagerModel currentManager;
 
         public ManagerController()
         {
@@ -22,13 +24,19 @@ namespace Xamine.Controllers
         //Manager Dashboard
         public ActionResult Dashboard()
         {
-            return View();
+            if (currentManager == null)
+            {
+                string currentUserId = TempData["EmpId"].ToString();
+                currentManager = _context.Managers.Include(c=>c.Project).SingleOrDefault(m => m.EmpId.Equals(currentUserId));
+            }
+            return View(currentManager);
         }
 
         //Add Project action for GET request
         public ActionResult AddProject()
         {
-            return View();
+            ProjectModel projectModel = new ProjectModel();
+            return View(projectModel);
         }
 
         //Add Project action for POST request
@@ -50,7 +58,9 @@ namespace Xamine.Controllers
                 {
                     project.ProjectId = "P-101";
                 }
-                //add reportee into list
+                
+                currentManager.Project.Add(project);
+                //add project into list
                 _context.Projects.Add(project);
                 _context.SaveChanges();
 
