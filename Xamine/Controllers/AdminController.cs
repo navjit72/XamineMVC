@@ -13,21 +13,18 @@ namespace Xamine.Controllers
     {
 
         private ApplicationDbContext _context;
-        private static AdminModel currentAdmin;
+        private AdminModel currentAdmin;
 
         public AdminController()
         {
             _context = new ApplicationDbContext();
+            string id= CookieStore.GetCookie("EmpId");
+            currentAdmin = _context.Admins.SingleOrDefault(a => a.EmpId.Equals(id));
         }
 
         //Admin Dashboard
         public ActionResult AdminDashboard()
         {
-            if (currentAdmin == null)
-            {
-                string currentAdminId = TempData["EmpId"].ToString();
-                currentAdmin = _context.Admins.SingleOrDefault(a => a.EmpId.Equals(currentAdminId));
-            }
             return View(_context);
         }
 
@@ -245,6 +242,7 @@ namespace Xamine.Controllers
         //Logout action
         public ActionResult Logout()
         {
+            CookieStore.RemoveCookie("EmpId");
             return RedirectToAction("Login", "Login");
         }
 

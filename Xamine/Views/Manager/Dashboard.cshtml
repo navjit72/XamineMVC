@@ -11,7 +11,7 @@
             <div id="imageCarousel" class="carousel slide" data-interval="2000"
                  data-ride="carousel" data-pause="hover" data-wrap="true">
                 <ol class="carousel-indicators">
-                    @if (Model.Project == null)
+                    @if(Model.Project.Count==0)
                     {
                         <li data-target="#imageCarousel" data-slide-to="0" class="active"></li>
                     }
@@ -31,7 +31,7 @@
                     }
                 </ol>
                 <div class="carousel-inner">
-                    @if (Model.Project == null)
+                    @if (Model.Project.Count==0)
                     {
                         <div class="item active">
                             <img src="~/images/image2.jpg" alt="Image" class="img-responsive">
@@ -69,7 +69,7 @@
                                     <p style="font-weight: bolder; color:brown;font-size:x-large">@Model.Project[i].Description</p>
                                     <div class="progress">
                                         <div class="progress-bar progress-bar-success" role="progressbar" style="width: @Model.Project[i].Progress%"
-                                             aria-valuenow="@Model.Project[i].Progress.ToString()" aria-valuemin="0" aria-valuemax="100">
+                                             aria-valuenow="@Model.Project[i].Progress" aria-valuemin="0" aria-valuemax="100">
                                             @Model.Project[i].Progress
                                         </div>
                                     </div>

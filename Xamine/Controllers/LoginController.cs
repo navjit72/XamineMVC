@@ -30,6 +30,17 @@ namespace Xamine.Controllers
         //Login action for GET request
         public ActionResult Login()
         {
+            if (CookieStore.GetCookie("EmpId")!=string.Empty)
+            {
+                string id = CookieStore.GetCookie("EmpId");
+                if (id.StartsWith("A"))
+                    return RedirectToAction("AdminDashboard", "Admin");
+                else if (id.StartsWith("M"))
+                    return RedirectToAction("Dashboard", "Manager");
+                else if (id.StartsWith("R"))
+                    return RedirectToAction("Dashboard", "Reportee");
+            }
+
             Login_ChangePasswordViewModel loginViewModel = new Login_ChangePasswordViewModel
             {
                 loginModel = new LoginModel(),
@@ -58,7 +69,7 @@ namespace Xamine.Controllers
                         {
                             if (admin.Password.Equals(viewModel.loginModel.Password))
                             {
-                                TempData["EmpId"] = admin.EmpId;
+                                CookieStore.SetCookie("EmpId", admin.EmpId);
                                 return RedirectToAction("AdminDashboard", "Admin");
                             }
                             else
@@ -82,7 +93,7 @@ namespace Xamine.Controllers
                         {
                             if (manager.Password.Equals(viewModel.loginModel.Password))
                             {
-                                TempData["EmpId"] = manager.EmpId;
+                                CookieStore.SetCookie("EmpId", manager.EmpId);
                                 return RedirectToAction("Dashboard", "Manager");
                             }
                             else
@@ -104,7 +115,7 @@ namespace Xamine.Controllers
                         {
                             if (reportee.Password.Equals(viewModel.loginModel.Password))
                             {
-                                TempData["EmpId"] = reportee.EmpId;
+                                CookieStore.SetCookie("EmpId", reportee.EmpId);
                                 return RedirectToAction("Dashboard", "Reportee");
                             }
                             else

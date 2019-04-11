@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Xamine.Models;
+using Xamine.ViewModels;
 
 //Author : Navjit Kaur
 
@@ -14,21 +15,25 @@ namespace Xamine.Controllers
     {
 
         private ApplicationDbContext _context;
-        private static ManagerModel currentManager;
+        private ManagerModel currentManager;
+
+        //private List<ProjectModel> projectList;
 
         public ManagerController()
         {
             _context = new ApplicationDbContext();
+            string id = CookieStore.GetCookie("EmpId");
+            currentManager = _context.Managers.Include(p => p.Project).SingleOrDefault(m => m.EmpId.Equals(id));
+            //projectList = new List<ProjectModel>();
         }
 
         //Manager Dashboard
         public ActionResult Dashboard()
         {
-            if (currentManager == null)
-            {
-                string currentUserId = TempData["EmpId"].ToString();
-                currentManager = _context.Managers.Include(c=>c.Project).SingleOrDefault(m => m.EmpId.Equals(currentUserId));
-            }
+                
+                //projectList.Add(_context.Projects.SingleOrDefault(p => p.ManagerRefId.Equals(currentUserId)));                
+            
+            //ViewBag.ProjectList = projectList;
             return View(currentManager);
         }
 
@@ -58,10 +63,11 @@ namespace Xamine.Controllers
                 {
                     project.ProjectId = "P-101";
                 }
-                
-                currentManager.Project.Add(project);
+                currentManager.Project = new List<ProjectModel>();
                 //add project into list
+                project.ManagerRefId = currentManager.EmpId;
                 _context.Projects.Add(project);
+                currentManager.Project.Add(project);
                 _context.SaveChanges();
 
                 //clearing the state
@@ -113,6 +119,7 @@ namespace Xamine.Controllers
         //Logout action
         public ActionResult Logout()
         {
+            CookieStore.RemoveCookie("EmpId");
             return RedirectToAction("Login", "Login");
         }
     }

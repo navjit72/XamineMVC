@@ -29,6 +29,7 @@ namespace Xamine.Controllers
         //Logout action
         public ActionResult Logout()
         {
+            CookieStore.RemoveCookie("EmpId");
             return RedirectToAction("Login", "Login");
         }
 

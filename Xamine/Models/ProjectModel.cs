@@ -12,6 +12,11 @@ namespace Xamine.Models
     [Table("project")]
     public class ProjectModel
     {
+        public ProjectModel()
+        {
+            Status = "Ongoing";
+        }
+
         [Key]
         [StringLength(7)]
         public string ProjectId { get; set; }
@@ -27,5 +32,13 @@ namespace Xamine.Models
         public string Status { get; set; }
 
         public int Progress { get; set; }
+
+        [ForeignKey("ManagerModel")]
+        public string ManagerRefId { get; set; }
+        public ManagerModel ManagerModel { get; set; }
+
+        public List<ReporteeModel> Reportees { get; set; }
+
+
     }
 }

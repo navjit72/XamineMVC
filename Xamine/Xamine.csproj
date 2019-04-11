@@ -194,10 +194,27 @@
     <Compile Include="Migrations\201904101424273_TaskDetailsAdded.Designer.cs">
       <DependentUpon>201904101424273_TaskDetailsAdded.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904101757279_ManagerReporteeProjectModel.cs" />
+    <Compile Include="Migrations\201904101757279_ManagerReporteeProjectModel.Designer.cs">
+      <DependentUpon>201904101757279_ManagerReporteeProjectModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904101914057_ManagerReporteeProjectModelUpdated.cs" />
+    <Compile Include="Migrations\201904101914057_ManagerReporteeProjectModelUpdated.Designer.cs">
+      <DependentUpon>201904101914057_ManagerReporteeProjectModelUpdated.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904101945150_ManagerReporteeProjectModelUpdated-2.cs" />
+    <Compile Include="Migrations\201904101945150_ManagerReporteeProjectModelUpdated-2.Designer.cs">
+      <DependentUpon>201904101945150_ManagerReporteeProjectModelUpdated-2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904110207299_ManagerProjectReporteeModelUpdated-3.cs" />
+    <Compile Include="Migrations\201904110207299_ManagerProjectReporteeModelUpdated-3.Designer.cs">
+      <DependentUpon>201904110207299_ManagerProjectReporteeModelUpdated-3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminModel.cs" />
     <Compile Include="Models\ChangePasswordModel.cs" />
+    <Compile Include="Models\CookieStore.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\ManagerModel.cs" />
@@ -485,6 +502,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904101424273_TaskDetailsAdded.resx">
       <DependentUpon>201904101424273_TaskDetailsAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904101757279_ManagerReporteeProjectModel.resx">
+      <DependentUpon>201904101757279_ManagerReporteeProjectModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904101914057_ManagerReporteeProjectModelUpdated.resx">
+      <DependentUpon>201904101914057_ManagerReporteeProjectModelUpdated.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904101945150_ManagerReporteeProjectModelUpdated-2.resx">
+      <DependentUpon>201904101945150_ManagerReporteeProjectModelUpdated-2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904110207299_ManagerProjectReporteeModelUpdated-3.resx">
+      <DependentUpon>201904110207299_ManagerProjectReporteeModelUpdated-3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

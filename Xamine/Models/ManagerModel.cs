@@ -12,8 +12,6 @@ namespace Xamine.Models
     [Table("manager")]
     public class ManagerModel : UserModel
     {
-
         public List<ProjectModel> Project { get; set; }
-
     }
 }
