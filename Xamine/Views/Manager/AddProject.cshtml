@@ -1,6 +1,6 @@
 ﻿@*Author : Navjit Kaur*@
 
-@model Xamine.Models.ProjectModel
+@model Xamine.ViewModels.ReporteeProjectViewModel
 @{
     ViewBag.Title = "AddProject";
     Layout = "~/Views/Shared/_ManagerLayout.cshtml";
@@ -9,7 +9,7 @@
 <center> <h2>Add Project</h2> </center>
 
 @*Form for submitting the request to add new project*@
-@using (Html.BeginForm("AddProject", "Manager", FormMethod.Post, new { @class = "partialforms" }))
+@using (Html.BeginForm("AddProject", "Manager", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     <hr />
@@ -20,33 +20,33 @@
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model=> model.ProjectModel.Name, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                @Html.TextBoxFor(model => model.ProjectModel.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ProjectModel.Name, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ProjectModel.Description, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
-
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Progress, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.Progress, new { @class = "form-control", @type = "number" })
+                @Html.TextAreaFor(model => model.ProjectModel.Description, new { @class = "form-control" })
 
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Status, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ProjectModel.Progress, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.Status, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.ProjectModel.Progress, new { @class = "form-control", @type = "number" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProjectModel.Status, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.ProjectModel.Status, new { @class = "form-control" })
 
             </div>
         </div>
@@ -57,10 +57,62 @@
             </div>
         </div>
     </div>
-}
+    <div class="container">
+        <table id="reportees" class="table table-responsive table-striped">
+            <thead>
+                <tr>
+                    <th>EmpId</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>DOB</th>
+                    <th>Gender</th>
+                    <th>Add</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reportee in Model.AllReportees)
+                {
+                    <tr>
+                        <td id="eId">@reportee.EmpId</td>
+                        <td id="eFname">@reportee.Fname</td>
+                        <td id="eLname">@reportee.Lname</td>
+                        <td id="eEmail">@reportee.Email</td>
+                        <td id="eContact">@reportee.Contact</td>
+                        <td id="eDOB">@reportee.DOB.Value.ToString("dd/MM/yyyy")</td>
+                        <td id="eGender">@reportee.Gender</td>
+                        <td>
+                            <a data-reportee-id="@reportee.EmpId" class="btn btn-default glyphicon glyphicon-plus-sign js-add" name="Add"></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        </div>
+        }
 
-@*Link to Manager Dashboard*@
-<div>
-    @Html.ActionLink("Back to Dashboard", "Dashboard")
-</div>
+        @*Link to Manager Dashboard*@
+        <div>
+            @Html.ActionLink("Back to Dashboard", "Dashboard")
+        </div>
 
+        @section scripts{
+            <script>
+                $(document).ready(function () {
+                    $("#reportees").DataTable();
+               
+                    $("#reportees").on("click", ".js-add", function () {
+                        var buttonRef = $(this);      
+                         
+                        $.ajax({
+                                url: "/Manager/AddReporteeToProject/" + buttonRef.attr("data-reportee-id"),
+                                method: "POST",
+                                success: function () {
+                                    buttonRef.parents("tr").remove();
+                                }
+                            });
+                    });
+                });
+            </script>
+        }
