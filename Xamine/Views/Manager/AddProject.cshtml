@@ -18,42 +18,35 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-
         <div class="form-group">
-            @Html.LabelFor(model=> model.ProjectModel.Name, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            @Html.LabelFor(model => model.ProjectModel.Name, new { @class = "control-label col-md-5" })
+            <div class="col-md-5">
                 @Html.TextBoxFor(model => model.ProjectModel.Name, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ProjectModel.Name, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ProjectModel.Description, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            @Html.LabelFor(model => model.ProjectModel.Description, new { @class = "control-label col-md-5" })
+            <div class="col-md-5">
                 @Html.TextAreaFor(model => model.ProjectModel.Description, new { @class = "form-control" })
 
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ProjectModel.Progress, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            @Html.LabelFor(model => model.ProjectModel.Progress, new { @class = "control-label col-md-5" })
+            <div class="col-md-5">
                 @Html.TextBoxFor(model => model.ProjectModel.Progress, new { @class = "form-control", @type = "number" })
 
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ProjectModel.Status, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            @Html.LabelFor(model => model.ProjectModel.Status, new { @class = "control-label col-md-5" })
+            <div class="col-md-5">
                 @Html.TextBoxFor(model => model.ProjectModel.Status, new { @class = "form-control" })
 
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -68,6 +61,9 @@
                     <th>Contact</th>
                     <th>DOB</th>
                     <th>Gender</th>
+                    <th>Hours Assigned</th>
+                    <th>Task Assigned</th>
+                    <th>Task Priority</th>
                     <th>Add</th>
                 </tr>
             </thead>
@@ -82,6 +78,24 @@
                         <td id="eContact">@reportee.Contact</td>
                         <td id="eDOB">@reportee.DOB.Value.ToString("dd/MM/yyyy")</td>
                         <td id="eGender">@reportee.Gender</td>
+                        <td><input class="form-control eHrsAsg" type="number" id="eHrsAsg" /></td>
+                        <td>
+                            <select id="eTask" class="form-control eTask">
+                                <option>PLAN</option>
+                                <option>DESIGN</option>
+                                <option>BUILD</option>
+                                <option>TEST</option>
+                                <option>DEPLOY</option>
+                                <option>MAINTAIN</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select id="ePriority" class="form-control ePriority">
+                                <option>LOW</option>
+                                <option>MEDIUM</option>
+                                <option>HIGH</option>
+                            </select>
+                        </td>
                         <td>
                             <a data-reportee-id="@reportee.EmpId" class="btn btn-default glyphicon glyphicon-plus-sign js-add" name="Add"></a>
                         </td>
@@ -89,30 +103,59 @@
                 }
             </tbody>
         </table>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-5 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
         </div>
+    </div>
+}
+
+@*Link to Manager Dashboard*@
+<div>
+    @Html.ActionLink("Back to Dashboard", "Dashboard")
+</div>
+
+@section scripts{
+    <style>
+        .form-control {
+            margin: 0px auto;
         }
+    </style>
 
-        @*Link to Manager Dashboard*@
-        <div>
-            @Html.ActionLink("Back to Dashboard", "Dashboard")
-        </div>
+    <script>
+        $(document).ready(function () {
+            $("#reportees").DataTable();
 
-        @section scripts{
-            <script>
-                $(document).ready(function () {
-                    $("#reportees").DataTable();
-               
-                    $("#reportees").on("click", ".js-add", function () {
-                        var buttonRef = $(this);      
-                         
-                        $.ajax({
-                                url: "/Manager/AddReporteeToProject/" + buttonRef.attr("data-reportee-id"),
-                                method: "POST",
-                                success: function () {
-                                    buttonRef.parents("tr").remove();
-                                }
-                            });
-                    });
+            $("#reportees").on("click", ".js-add", function () {
+                var buttonRef = $(this);
+                var hours = buttonRef.parents("tr").find(".eHrsAsg").val();
+                var task = buttonRef.parents("tr").find(".eTask").val();
+                var priority = buttonRef.parents("tr").find(".ePriority").val();
+                
+
+                var EmpData =
+                {
+                    "EmpId" : buttonRef.attr("data-reportee-id"),
+                    "HoursAssigned" : hours,
+                    "TaskAssigned" : task,
+                    "TaskPriority" : priority
+                };
+
+                
+
+                console.log(EmpData.EmpId + ":" + EmpData.HoursAssigned + ":" + EmpData.TaskAssigned + ":" + EmpData.TaskPriority); 
+                
+                $.ajax({
+                    url: "/Manager/AddReporteeToProject/",
+                    method: "POST",
+                    data: EmpData,
+                    success: function () {
+                        console.log("Called");
+                        buttonRef.parents("tr").remove();
+                    }
                 });
-            </script>
-        }
+            });
+        });
+    </script>
+}

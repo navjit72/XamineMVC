@@ -16,7 +16,7 @@ namespace Xamine.Controllers
 
         private ApplicationDbContext _context;
         private ManagerModel currentManager;
-        private static List<string> reporteesAdded = new List<string>();
+        private static List<ReporteeDataViewModel> reporteesAdded = new List<ReporteeDataViewModel>();
         //private List<ProjectModel> projectList;
 
         public ManagerController()
@@ -45,14 +45,13 @@ namespace Xamine.Controllers
             foreach(ReporteeModel reportee in _context.Reportees)
             {
                 if (reportee.ProjectRefId == null)
-                    if(!reporteesAdded.Contains(reportee.EmpId))
-                        reporteeList.Add(reportee);
+                    
+                     reporteeList.Add(reportee);
             }
             ReporteeProjectViewModel viewModel = new ReporteeProjectViewModel()
             {
                 ProjectModel = new ProjectModel(),
-                AllReportees = reporteeList,
-                ReporteesAdded = reporteesAdded
+                AllReportees = reporteeList
             };
             return View(viewModel);
         }
@@ -82,10 +81,14 @@ namespace Xamine.Controllers
 
                 List<ReporteeModel> addedReportees = new List<ReporteeModel>();
 
-                foreach(string id in reporteesAdded)
+                foreach(ReporteeDataViewModel entry in reporteesAdded)
                 {
-                    ReporteeModel repor = _context.Reportees.SingleOrDefault(r=>r.EmpId.Equals(id));
+                    ReporteeModel repor = _context.Reportees.SingleOrDefault(r=>r.EmpId.Equals(entry.EmpId));
                     repor.ProjectRefId = viewModel.ProjectModel.ProjectId;
+                    
+                    repor.HoursAssigned = Convert.ToInt16(entry.HoursAssigned);
+                    repor.TaskAssigned = entry.TaskAssigned;
+                    repor.TaskPriority = entry.TaskPriority;
                     addedReportees.Add(repor);
                 }
 
@@ -113,10 +116,11 @@ namespace Xamine.Controllers
 
         //Add reportee to project
         [HttpPost]
-        public ActionResult AddReporteeToProject(string id)
+        public ActionResult AddReporteeToProject(ReporteeDataViewModel jsonModel)
         {
-            reporteesAdded.Add(id);
-            return RedirectToAction("AddProject","Manager");
+            reporteesAdded.Add(jsonModel);
+
+            return RedirectToAction("AddProject");
         }
 
         //Update Project

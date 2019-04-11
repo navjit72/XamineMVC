@@ -9,7 +9,8 @@ namespace Xamine.ViewModels
     public class ReporteeProjectViewModel
     {
         public List<ReporteeModel> AllReportees { get; set; }
-        public List<string> ReporteesAdded { get; set; }
+        
         public ProjectModel ProjectModel { get; set; }
+
     }
 }
