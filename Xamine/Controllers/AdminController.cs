@@ -13,16 +13,18 @@ namespace Xamine.Controllers
     {
 
         private ApplicationDbContext _context;
+        private AdminModel currentAdmin;
 
         public AdminController()
         {
             _context = new ApplicationDbContext();
+            string id= CookieStore.GetCookie("EmpId");
+            currentAdmin = _context.Admins.SingleOrDefault(a => a.EmpId.Equals(id));
         }
 
         //Admin Dashboard
         public ActionResult AdminDashboard()
         {
-
             return View(_context);
         }
 
@@ -240,6 +242,7 @@ namespace Xamine.Controllers
         //Logout action
         public ActionResult Logout()
         {
+            CookieStore.RemoveCookie("EmpId");
             return RedirectToAction("Login", "Login");
         }
 

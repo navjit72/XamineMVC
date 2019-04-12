@@ -24,6 +24,7 @@ namespace Xamine.Models
         public virtual DbSet<ManagerModel> Managers { get; set; }
         public virtual DbSet<ReporteeModel> Reportees { get; set; }
         public virtual DbSet<ProjectModel> Projects { get; set; }
+        
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

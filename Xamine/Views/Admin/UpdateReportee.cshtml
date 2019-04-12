@@ -20,11 +20,11 @@
 </script>
 
 @*Form for submitting the request to add new manager*@
-@using (Html.BeginForm("UpdateReporteePartialView", "Admin", FormMethod.Post, new { @class = "partialforms" }))
+@using (Html.BeginForm("UpdateReporteePartialView", "Admin", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     <hr />
-    <div>
+    <div class="container">
         <table id="managers" class="table table-responsive table-striped">
             <thead>
                 <tr>

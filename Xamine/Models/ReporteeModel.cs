@@ -12,13 +12,17 @@ namespace Xamine.Models
     [Table("reportee")]
     public class ReporteeModel : UserModel
     {
-
-        public List<ProjectModel> Project { get; set; }
+        [ForeignKey("ProjectModel")]
+        public string ProjectRefId { get; set; }
+        public ProjectModel ProjectModel { get; set; }
 
         public int HoursAssigned { get; set; }
 
         public int HoursWorked { get; set; }
 
+        public string TaskAssigned { get; set; }
+
+        public string TaskPriority { get; set; }
 
     }
 }

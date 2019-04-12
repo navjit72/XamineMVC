@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Xamine.Models;
+using Xamine.ViewModels;
 
 //Author : Navjit Kaur
 
@@ -13,27 +15,50 @@ namespace Xamine.Controllers
     {
 
         private ApplicationDbContext _context;
+        private ManagerModel currentManager;
+        private static List<ReporteeDataViewModel> reporteesAdded = new List<ReporteeDataViewModel>();
+        //private List<ProjectModel> projectList;
 
         public ManagerController()
         {
             _context = new ApplicationDbContext();
+            string id = CookieStore.GetCookie("EmpId");
+            currentManager = _context.Managers.Include(p => p.Project).SingleOrDefault(m => m.EmpId.Equals(id));
+            
+            //projectList = new List<ProjectModel>();
         }
 
         //Manager Dashboard
         public ActionResult Dashboard()
         {
-            return View();
+                
+                //projectList.Add(_context.Projects.SingleOrDefault(p => p.ManagerRefId.Equals(currentUserId)));                
+            
+            //ViewBag.ProjectList = projectList;
+            return View(currentManager);
         }
 
         //Add Project action for GET request
         public ActionResult AddProject()
         {
-            return View();
+            List<ReporteeModel> reporteeList = new List<ReporteeModel>();
+            foreach(ReporteeModel reportee in _context.Reportees)
+            {
+                if (reportee.ProjectRefId == null)
+                    
+                     reporteeList.Add(reportee);
+            }
+            ReporteeProjectViewModel viewModel = new ReporteeProjectViewModel()
+            {
+                ProjectModel = new ProjectModel(),
+                AllReportees = reporteeList
+            };
+            return View(viewModel);
         }
 
         //Add Project action for POST request
         [HttpPost]
-        public ActionResult AddProject(ProjectModel project)
+        public ActionResult AddProject(ReporteeProjectViewModel viewModel)
         {
             //if validations are valid
             if (ModelState.IsValid)
@@ -44,24 +69,58 @@ namespace Xamine.Controllers
                     string[] id = lastproject.ProjectId.Split('-');
                     int pid = Convert.ToInt16(id[1]);
                     pid += 1;
-                    project.ProjectId = "P-" + pid;
+                    viewModel.ProjectModel.ProjectId = "P-" + pid;
                 }
                 else
                 {
-                    project.ProjectId = "P-101";
+                    viewModel.ProjectModel.ProjectId = "P-101";
                 }
-                //add reportee into list
-                _context.Projects.Add(project);
+                currentManager.Project = new List<ProjectModel>();
+                //add project into list
+                viewModel.ProjectModel.ManagerRefId = currentManager.EmpId;
+
+                List<ReporteeModel> addedReportees = new List<ReporteeModel>();
+
+                foreach(ReporteeDataViewModel entry in reporteesAdded)
+                {
+                    ReporteeModel repor = _context.Reportees.SingleOrDefault(r=>r.EmpId.Equals(entry.EmpId));
+                    repor.ProjectRefId = viewModel.ProjectModel.ProjectId;
+                    
+                    repor.HoursAssigned = Convert.ToInt16(entry.HoursAssigned);
+                    repor.TaskAssigned = entry.TaskAssigned;
+                    repor.TaskPriority = entry.TaskPriority;
+                    addedReportees.Add(repor);
+                }
+
+
+                viewModel.ProjectModel.Reportees = addedReportees;
+
+
+                _context.Projects.Add(viewModel.ProjectModel);
+                currentManager.Project.Add(viewModel.ProjectModel);
+
+
+
                 _context.SaveChanges();
 
                 //clearing the state
                 ModelState.Clear();
             }
 
-            //passing new ProjectModel to view
-            var projectModel = new ProjectModel();
-            return View(projectModel);
+            reporteesAdded.Clear();
 
+            return RedirectToAction("AddProject", "Manager");
+
+        }
+
+
+        //Add reportee to project
+        [HttpPost]
+        public ActionResult AddReporteeToProject(ReporteeDataViewModel jsonModel)
+        {
+            reporteesAdded.Add(jsonModel);
+
+            return RedirectToAction("AddProject");
         }
 
         //Update Project
@@ -103,6 +162,7 @@ namespace Xamine.Controllers
         //Logout action
         public ActionResult Logout()
         {
+            CookieStore.RemoveCookie("EmpId");
             return RedirectToAction("Login", "Login");
         }
     }

@@ -30,6 +30,17 @@ namespace Xamine.Controllers
         //Login action for GET request
         public ActionResult Login()
         {
+            if (CookieStore.GetCookie("EmpId")!=string.Empty)
+            {
+                string id = CookieStore.GetCookie("EmpId");
+                if (id.StartsWith("A"))
+                    return RedirectToAction("AdminDashboard", "Admin");
+                else if (id.StartsWith("M"))
+                    return RedirectToAction("Dashboard", "Manager");
+                else if (id.StartsWith("R"))
+                    return RedirectToAction("Dashboard", "Reportee");
+            }
+
             Login_ChangePasswordViewModel loginViewModel = new Login_ChangePasswordViewModel
             {
                 loginModel = new LoginModel(),
@@ -46,9 +57,7 @@ namespace Xamine.Controllers
         {
             if (Request.Form["LoginButton"] != null)
             {
-                string messages = string.Join("; ", ModelState.Values
-                                        .SelectMany(x => x.Errors)
-                                        .Select(x => x.ErrorMessage));
+
                 //if validations are valid
                 if (ModelState.IsValid)
                 {
@@ -60,8 +69,7 @@ namespace Xamine.Controllers
                         {
                             if (admin.Password.Equals(viewModel.loginModel.Password))
                             {
-                                //loginModel.Designation = "Admin";
-                                //TempData["contextModel"] = _context;
+                                CookieStore.SetCookie("EmpId", admin.EmpId);
                                 return RedirectToAction("AdminDashboard", "Admin");
                             }
                             else
@@ -76,9 +84,7 @@ namespace Xamine.Controllers
                             viewModel.loginModel.Error = "Admin with given Id does not exist";
 
                         }
-                        messages = string.Join("; ", ModelState.Values
-                                        .SelectMany(x => x.Errors)
-                                        .Select(x => x.ErrorMessage));
+
                     }
                     else if (viewModel.loginModel.EmpId.ElementAt(0) == 'M')
                     {
@@ -87,7 +93,7 @@ namespace Xamine.Controllers
                         {
                             if (manager.Password.Equals(viewModel.loginModel.Password))
                             {
-                                //loginModel.Designation = "Manager";
+                                CookieStore.SetCookie("EmpId", manager.EmpId);
                                 return RedirectToAction("Dashboard", "Manager");
                             }
                             else
@@ -109,7 +115,7 @@ namespace Xamine.Controllers
                         {
                             if (reportee.Password.Equals(viewModel.loginModel.Password))
                             {
-                                //loginModel.Designation = "Reportee";
+                                CookieStore.SetCookie("EmpId", reportee.EmpId);
                                 return RedirectToAction("Dashboard", "Reportee");
                             }
                             else
@@ -137,8 +143,8 @@ namespace Xamine.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //if (viewModel.changePasswordModel.NewPassword.Equals(viewModel.changePasswordModel.ConfirmPassword))
-                    //{
+
+
                     //checking the type of user trying to login
                     if (viewModel.changePasswordModel.EmpId.ElementAt(0) == 'A')
                     {
