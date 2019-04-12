@@ -141,17 +141,12 @@
                     "TaskAssigned" : task,
                     "TaskPriority" : priority
                 };
-
-                
-
-                console.log(EmpData.EmpId + ":" + EmpData.HoursAssigned + ":" + EmpData.TaskAssigned + ":" + EmpData.TaskPriority); 
                 
                 $.ajax({
                     url: "/Manager/AddReporteeToProject/",
                     method: "POST",
                     data: EmpData,
                     success: function () {
-                        console.log("Called");
                         buttonRef.parents("tr").remove();
                     }
                 });

@@ -6,10 +6,9 @@ using Xamine.Models;
 
 namespace Xamine.ViewModels
 {
-    public class ReporteeProjectViewModel
+    public class ProjectReporteeViewModel
     {
-        public List<ReporteeModel> AllReportees { get; set; }
+        public List<ReporteeModel> ReporteesInProject { get; set; }
         public ProjectModel ProjectModel { get; set; }
-
     }
 }
