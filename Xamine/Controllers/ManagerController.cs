@@ -17,24 +17,18 @@ namespace Xamine.Controllers
         private ApplicationDbContext _context;
         private ManagerModel currentManager;
         private static List<ReporteeDataViewModel> reporteesAdded = new List<ReporteeDataViewModel>();
-        //private List<ProjectModel> projectList;
+
 
         public ManagerController()
         {
             _context = new ApplicationDbContext();
             string id = CookieStore.GetCookie("EmpId");
             currentManager = _context.Managers.Include(p => p.Project).SingleOrDefault(m => m.EmpId.Equals(id));
-            
-            //projectList = new List<ProjectModel>();
         }
 
         //Manager Dashboard
         public ActionResult Dashboard()
         {
-                
-                //projectList.Add(_context.Projects.SingleOrDefault(p => p.ManagerRefId.Equals(currentUserId)));                
-            
-            //ViewBag.ProjectList = projectList;
             return View(currentManager);
         }
 
@@ -42,11 +36,10 @@ namespace Xamine.Controllers
         public ActionResult AddProject()
         {
             List<ReporteeModel> reporteeList = new List<ReporteeModel>();
-            foreach(ReporteeModel reportee in _context.Reportees)
+            foreach (ReporteeModel reportee in _context.Reportees)
             {
                 if (reportee.ProjectRefId == null)
-                    
-                     reporteeList.Add(reportee);
+                    reporteeList.Add(reportee);
             }
             ReporteeProjectViewModel viewModel = new ReporteeProjectViewModel()
             {
@@ -75,17 +68,16 @@ namespace Xamine.Controllers
                 {
                     viewModel.ProjectModel.ProjectId = "P-101";
                 }
-                currentManager.Project = new List<ProjectModel>();
+
                 //add project into list
                 viewModel.ProjectModel.ManagerRefId = currentManager.EmpId;
 
                 List<ReporteeModel> addedReportees = new List<ReporteeModel>();
 
-                foreach(ReporteeDataViewModel entry in reporteesAdded)
+                foreach (ReporteeDataViewModel entry in reporteesAdded)
                 {
-                    ReporteeModel repor = _context.Reportees.SingleOrDefault(r=>r.EmpId.Equals(entry.EmpId));
+                    ReporteeModel repor = _context.Reportees.SingleOrDefault(r => r.EmpId.Equals(entry.EmpId));
                     repor.ProjectRefId = viewModel.ProjectModel.ProjectId;
-                    
                     repor.HoursAssigned = Convert.ToInt16(entry.HoursAssigned);
                     repor.TaskAssigned = entry.TaskAssigned;
                     repor.TaskPriority = entry.TaskPriority;
@@ -119,26 +111,177 @@ namespace Xamine.Controllers
         public ActionResult AddReporteeToProject(ReporteeDataViewModel jsonModel)
         {
             reporteesAdded.Add(jsonModel);
-
             return RedirectToAction("AddProject");
         }
 
         //Update Project
         public ActionResult UpdateProject()
         {
-            return View();
+            List<ProjectModel> projectList = new List<ProjectModel>();
+            foreach (ProjectModel proj in _context.Projects)
+            {
+                if (proj.ManagerRefId.Equals(currentManager.EmpId))
+                    projectList.Add(proj);
+            }
+            return View(projectList);
         }
+
+        [HttpGet]
+        public ActionResult UpdateProjectPartialView(string id)
+        {
+            ProjectModel projectModel = _context.Projects.Include(p => p.Reportees).SingleOrDefault(m => m.ProjectId.Equals(id));
+
+            return PartialView(projectModel);
+
+        }
+
+
+        //[HttpPost]
+        //public ActionResult UpdateProjectPartialView(ProjectModel projectModel)
+        //{
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (_context.Projects.ToList().Count != 0)
+        //        {
+        //            ProjectModel prevProject = _context.Projects.Include(c=>c.Reportees).SingleOrDefault(m => m.ProjectId == projectModel.ProjectId);
+        //            List<ReporteeModel> prevReportees = prevProject.Reportees;
+        //            if (prevProject != null)
+        //            {
+        //                prevProject.Name = projectModel.Name;
+        //                prevProject.Description = projectModel.Description;
+        //                prevProject.Progress = projectModel.Progress;
+        //                prevProject.Status = projectModel.Status;
+        //                prevProject.ManagerRefId = currentManager.EmpId;
+
+        //                List<ReporteeModel> currentReportees = new List<ReporteeModel>();
+
+        //                foreach (ReporteeDataViewModel entry in reporteesAdded)
+        //                {
+        //                    ReporteeModel repor = prevReportees.SingleOrDefault(r => r.EmpId.Equals(entry.EmpId));
+        //                    repor.HoursAssigned = Convert.ToInt16(entry.HoursAssigned);
+        //                    repor.TaskAssigned = entry.TaskAssigned;
+        //                    repor.TaskPriority = entry.TaskPriority;
+        //                    currentReportees.Add(repor);
+        //                }
+
+        //                foreach (ReporteeModel reportee in prevReportees)
+        //                {
+        //                    if (currentReportees.Contains(reportee) == false)
+        //                    {
+        //                        reportee.ProjectRefId = null;
+        //                        reportee.HoursAssigned = 0;
+        //                        reportee.TaskAssigned = null;
+        //                        reportee.TaskPriority = null;
+        //                    }
+
+        //                }
+        //                prevProject.Reportees = currentReportees;
+        //            }
+        //        }
+        //        _context.SaveChanges();
+
+        //        //clearing the state
+        //        ModelState.Clear();
+
+        //        reporteesAdded.Clear();
+
+        //    }
+        //    return RedirectToAction("UpdateProject");
+        //}
+
+        [HttpPost]
+        public ActionResult UpdateReporteeInProject(List<ReporteeDataViewModel> jsonData)
+        {
+            reporteesAdded = jsonData;
+            ReporteeDataViewModel reporteeData = reporteesAdded.First();
+            ProjectModel projectModel = new ProjectModel();
+            projectModel.ProjectId = reporteeData.ProjectId;
+            projectModel.Name = reporteeData.ProjectName;
+            projectModel.Description = reporteeData.Description;
+            projectModel.Progress = Convert.ToInt16(reporteeData.Progress);
+            projectModel.Status = reporteeData.Status;
+
+            if (ModelState.IsValid)
+            {
+                if (_context.Projects.ToList().Count != 0)
+                {
+                    ProjectModel prevProject = _context.Projects.Include(c => c.Reportees).SingleOrDefault(m => m.ProjectId == projectModel.ProjectId);
+                    List<ReporteeModel> prevReportees = prevProject.Reportees;
+                    if (prevProject != null)
+                    {
+                        prevProject.Name = projectModel.Name;
+                        prevProject.Description = projectModel.Description;
+                        prevProject.Progress = projectModel.Progress;
+                        prevProject.Status = projectModel.Status;
+                        prevProject.ManagerRefId = currentManager.EmpId;
+
+                        List<ReporteeModel> currentReportees = new List<ReporteeModel>();
+
+                        foreach (ReporteeDataViewModel entry in reporteesAdded)
+                        {
+                            if (entry.EmpId != null)
+                            {
+                                ReporteeModel repor = prevReportees.SingleOrDefault(r => r.EmpId.Equals(entry.EmpId));
+                                repor.HoursAssigned = Convert.ToInt16(entry.HoursAssigned);
+                                repor.TaskAssigned = entry.TaskAssigned;
+                                repor.TaskPriority = entry.TaskPriority;
+                                currentReportees.Add(repor);
+                            }
+                        }
+
+                        foreach (ReporteeModel reportee in prevReportees)
+                        {
+                            if (currentReportees.Contains(reportee) == false)
+                            {
+                                reportee.ProjectRefId = null;
+                                reportee.HoursAssigned = 0;
+                                reportee.TaskAssigned = null;
+                                reportee.TaskPriority = null;
+                            }
+
+                        }
+                        prevProject.Reportees = currentReportees;
+                    }
+                }
+                _context.SaveChanges();
+
+                //clearing the state
+                ModelState.Clear();
+
+                if (reporteesAdded != null)
+                    reporteesAdded.Clear();
+
+            }
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+
+        }
+
 
         //Delete Project
-        public ActionResult DeleteProject()
+        [HttpPost]
+        public ActionResult DeleteProject(string id)
         {
-            return View();
-        }
+            if (ModelState.IsValid)
+            {
+                if (_context.Projects.ToList().Count != 0)
+                {
+                    ProjectModel project = _context.Projects.Include(c => c.Reportees).SingleOrDefault(m => m.ProjectId.Equals(id));
+                    if (project != null)
+                    {
+                        project.ManagerRefId = null;
+                        foreach (ReporteeModel reportee in project.Reportees)
+                            reportee.ProjectRefId = null;
+                        _context.Projects.Remove(project);
+                    }
+                }
+                _context.SaveChanges();
 
-        //Assign Task to reportee
-        public ActionResult AssignTask()
-        {
-            return View();
+                //clearing the state
+                ModelState.Clear();
+
+            }
+            return RedirectToAction("UpdateProject");
         }
 
         //Provide Ratings to reportee

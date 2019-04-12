@@ -1,0 +1,149 @@
+﻿@*Author : Navjit Kaur*@
+
+@model List<Xamine.Models.ProjectModel>
+
+@{
+    ViewBag.Title = "UpdateProject";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+<center> <h2>Project Details</h2> </center>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+    function createModal(url) {
+
+        $("#modelContent").load(url, function () {
+            $("#exampleModal").modal("show");
+
+        })
+    }
+</script>
+
+@*Form for submitting the request to add new manager*@
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    <div class="container">
+        <table id="projects" class="table table-responsive table-striped">
+            <thead>
+                <tr>
+                    <th>ProjectId</th>
+                    <th>Project Name</th>
+                    <th>Description</th>
+                    <th>Progress</th>
+                    <th>Status</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var project in Model)
+                {
+                    <tr>
+                        <td id="pId">@project.ProjectId</td>
+                        <td id="pName">@project.Name</td>
+                        <td id="pDesc">@project.Description</td>
+                        <td id="pProg">@project.Progress</td>
+                        <td id="pStatus">@project.Status</td>
+                        <td><a class="btn btn-default js-update" data-toggle="modal" data-target="#exampleModal" id="@project.ProjectId" onclick="createModal('@Url.Action("UpdateProjectPartialView", "Manager" , new {id=project.ProjectId })')"><i class="glyphicon glyphicon-edit" /></a></td>
+                        <td>
+                            <a data-project-id="@project.ProjectId" class="btn btn-default glyphicon glyphicon-trash js-delete" name="Delete"></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="exampleModalLabel">Update Details</h2>
+                    </div>
+                    <div class="modal-body" id="modelContent">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary js-add">Save</button>
+                        </div>
+                                        
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section scripts
+    {
+        <style>
+            .modal-dialog{
+                width: max-content;
+            }
+        </style>
+        <script>
+            $(document).ready(function () {
+                var EmpDetails = [];
+                $("#projects").DataTable();
+
+                $("#projects").on("click",".js-delete", function () {
+                    var buttonRef = $(this);
+                    bootbox.confirm("Are you sure you want to delete this project?", function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: "/Manager/DeleteProject/" + buttonRef.attr("data-project-id"),
+                                method: "POST",
+                                success: function () {
+                                    buttonRef.parents("tr").remove();
+                                }
+                            });
+                        }
+                    });
+
+                });
+
+                $(".js-add").click(function () {
+                    var refBtn = $(this);
+                    var tempData = {};
+                    tempData.pId = refBtn.parents("div")[1].children[1].children[0].children[0].children[1].children[0].value;
+                    tempData.name = refBtn.parents("div")[1].children[1].children[0].children[1].children[1].children[0].value;
+                    tempData.desc = refBtn.parents("div")[1].children[1].children[0].children[2].children[1].children[0].value;
+                    tempData.progress = refBtn.parents("div")[1].children[1].children[0].children[3].children[1].children[0].value;
+                    tempData.status = refBtn.parents("div")[1].children[1].children[0].children[4].children[1].children[0].value;
+
+                    $(".table").find("tr.reporteeRow").each((e, r) => {
+                        var EmpData = {};
+                        if (r.children[10].children[0].checked) {
+                            EmpData.EmpId = r.children[0].innerText;
+                            EmpData.HoursAssigned = r.children[7].children[0].value;
+                            EmpData.TaskAssigned = r.children[9].children[0].value;
+                            EmpData.TaskPriority = r.children[10].children[0].checked;
+                        }
+                            EmpData.ProjectId = tempData.pId;
+                            EmpData.ProjectName = tempData.name;
+                            EmpData.Description = tempData.desc;
+                            EmpData.Progress = tempData.progress;
+                            EmpData.Status = tempData.status;
+                            EmpDetails.push(EmpData);
+                    });
+
+                    console.log(EmpDetails);
+                    $("#exampleModal").modal('hide');
+                    $.ajax({
+                        url: "/Manager/UpdateReporteeInProject/",
+                        method: "POST",
+                        data: JSON.stringify(EmpDetails),
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function () {
+                            location.reload();
+                        }
+                    });
+                    
+                });
+            });
+        </script>
+    }
+
+}

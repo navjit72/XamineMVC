@@ -1,0 +1,99 @@
+﻿@*Author : Navjit Kaur*@
+
+@model Xamine.Models.ProjectModel
+
+
+@using (Html.BeginForm())
+{
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProjectId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProjectId, new { htmlAttributes = new { @class = "form-control pId", @readonly = "readonly" } })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control pName" } })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control pDesc" } })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Progress, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Progress, new { htmlAttributes = new { @class = "form-control pProgress", @type = "number" } })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control pStatus" } })
+            </div>
+        </div>
+    </div>
+    <table id="reportees" class="table table-responsive">
+        <thead>
+            <tr>
+                <th>EmpId</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>DOB</th>
+                <th>Gender</th>
+                <th>Hours Assigned</th>
+                <th>Task Assigned</th>
+                <th>Task Priority</th>
+                <th>Add</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reportee in Model.Reportees)
+            {
+                <tr class="reporteeRow">
+                    <td id="eId">@reportee.EmpId</td>
+                    <td id="eFname">@reportee.Fname</td>
+                    <td id="eLname">@reportee.Lname</td>
+                    <td id="eEmail">@reportee.Email</td>
+                    <td id="eContact">@reportee.Contact</td>
+                    <td id="eDOB">@reportee.DOB.Value.ToString("dd/MM/yyyy")</td>
+                    <td id="eGender">@reportee.Gender</td>
+                    <td><input class="form-control eHrsAsg" type="number" id="eHrsAsg" value="@reportee.HoursAssigned" /></td>
+                    <td>
+                        <select id="eTask" class="form-control eTask">
+                            <option>PLAN</option>
+                            <option>DESIGN</option>
+                            <option>BUILD</option>
+                            <option>TEST</option>
+                            <option>DEPLOY</option>
+                            <option>MAINTAIN</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select id="ePriority" class="form-control ePriority">
+                            <option>LOW</option>
+                            <option>MEDIUM</option>
+                            <option>HIGH</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input class="form-check-input" type="checkbox" value="" id="@reportee.EmpId">
+                        @*<a data-reportee-id="@reportee.EmpId" class="btn btn-default glyphicon glyphicon-plus-sign js-add" name="Add"></a>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+
+
+
