@@ -242,7 +242,12 @@ namespace Xamine.Controllers
                         project.ManagerRefId = null;
                         //detach all reportees from project
                         foreach (ReporteeModel reportee in project.Reportees)
+                        {
                             reportee.ProjectRefId = null;
+                            reportee.HoursAssigned = 0;
+                            reportee.TaskAssigned = null;
+                            reportee.TaskPriority = null;
+                        }
                         //finally remove the project from database
                         _context.Projects.Remove(project);
                     }
