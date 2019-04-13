@@ -35,22 +35,25 @@
                     <th>Status</th>
                     <th>Update</th>
                     <th>Delete</th>
+                    <th>Statistics</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var project in Model)
                 {
-                    <tr>
-                        <td id="pId">@project.ProjectId</td>
-                        <td id="pName">@project.Name</td>
-                        <td id="pDesc">@project.Description</td>
-                        <td id="pProg">@project.Progress</td>
-                        <td id="pStatus">@project.Status</td>
-                        <td><a class="btn btn-default js-update" data-toggle="modal" data-target="#exampleModal" id="@project.ProjectId" onclick="createModal('@Url.Action("UpdateProjectPartialView", "Manager" , new {id=project.ProjectId })')"><i class="glyphicon glyphicon-edit" /></a></td>
-                        <td>
-                            <a data-project-id="@project.ProjectId" class="btn btn-default glyphicon glyphicon-trash js-delete" name="Delete"></a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td id="pId">@project.ProjectId</td>
+                    <td id="pName">@project.Name</td>
+                    <td id="pDesc">@project.Description</td>
+                    <td id="pProg">@project.Progress</td>
+                    <td id="pStatus">@project.Status</td>
+                    <td><a class="btn btn-default js-update" data-toggle="modal" data-target="#exampleModal" id="@project.ProjectId" onclick="createModal('@Url.Action("UpdateProjectPartialView", "Manager", new { id = project.ProjectId })')"><i class="glyphicon glyphicon-edit" /></a></td>
+                    <td>
+                        <a data-project-id="@project.ProjectId" class="btn btn-default glyphicon glyphicon-trash js-delete" name="Delete"></a>
+                    </td>
+                    <td>
+                    <a class="btn btn-default" id="@project.ProjectId" href="@Url.Action("ProjectStatistics", "Manager", new { id = project.ProjectId })"><i class="glyphicon glyphicon-dashboard" /></a></td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -74,7 +77,7 @@
             </div>
         </div>
     </div>
-
+}
     @section scripts
     {
         <style>
@@ -95,7 +98,8 @@
                                 url: "/Manager/DeleteProject/" + buttonRef.attr("data-project-id"),
                                 method: "POST",
                                 success: function () {
-                                    buttonRef.parents("tr").remove();
+                                    //.parents("tr").remove();
+                                    location.reload();
                                 }
                             });
                         }
@@ -117,8 +121,8 @@
                         if (r.children[10].children[0].checked) {
                             EmpData.EmpId = r.children[0].innerText;
                             EmpData.HoursAssigned = r.children[7].children[0].value;
-                            EmpData.TaskAssigned = r.children[9].children[0].value;
-                            EmpData.TaskPriority = r.children[10].children[0].checked;
+                            EmpData.TaskAssigned = r.children[8].children[0].value;
+                            EmpData.TaskPriority = r.children[9].children[0].checked;
                         }
                             EmpData.ProjectId = tempData.pId;
                             EmpData.ProjectName = tempData.name;
@@ -146,4 +150,4 @@
         </script>
     }
 
-}
+

@@ -91,7 +91,8 @@
                                 url: "/Admin/DeleteReportee/" + buttonRef.attr("data-manager-id"),
                                 method: "POST",
                                 success: function () {
-                                    buttonRef.parents("tr").remove();
+                                    //buttonRef.parents("tr").remove();
+                                    location.reload();
                                 }
                             });
                         }

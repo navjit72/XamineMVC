@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
+//Author : Navjit Kaur
+
 namespace Xamine.Models
 {
     public class UserModel
@@ -39,7 +41,9 @@ namespace Xamine.Models
         public string Email { get; set; }
 
         [Required]
-        [StringLength(255)]
+        [StringLength(100, ErrorMessage = "The password must be at least {2} characters long.", MinimumLength = 4)]
+        [DataType(DataType.Password)]
+        [RegularExpression(@"[0-9]+",ErrorMessage ="Only numbers are allowed")]
         public string Password { get; set; }
     }
 }

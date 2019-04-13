@@ -24,18 +24,18 @@
                 your current and new password.
             </p>
             @Html.TextBoxFor(e => e.changePasswordModel.EmpId, new { @class = "empId", @placeholder = "Insert Employee Id" })
-            @Html.ValidationMessageFor(e => e.changePasswordModel.EmpId, "", new { @class = "text-danger", id = "changeId" })
+            @Html.ValidationMessageFor(e => e.changePasswordModel.EmpId, "", new { @class = "text-danger", id = "EmpIdError" })
 
             @Html.TextBoxFor(e => e.changePasswordModel.Password, new { @class = "oldPass", @type = "password", @placeholder = "Insert old Password" })
-            @Html.ValidationMessageFor(e => e.changePasswordModel.Password, "", new { @class = "text-danger", id = "changeId" })
+            @Html.ValidationMessageFor(e => e.changePasswordModel.Password, "", new { @class = "text-danger", id = "PasswordError" })
 
             @Html.TextBoxFor(e => e.changePasswordModel.NewPassword, new { @class = "newPass", @type = "password", @placeholder = "New Password" })
-            @Html.ValidationMessageFor(e => e.changePasswordModel.NewPassword, "", new { @class = "text-danger", id = "changeId" })
+            @Html.ValidationMessageFor(e => e.changePasswordModel.NewPassword, "", new { @class = "text-danger", id = "NewPassError" })
 
             @Html.TextBoxFor(e => e.changePasswordModel.ConfirmPassword, new { @class = "verifyPass", @type = "password", @placeholder = "Confirm Password" })
-            @Html.ValidationMessageFor(e => e.changePasswordModel.ConfirmPassword, "", new { @class = "text-danger", id = "changeId" })
+            @Html.ValidationMessageFor(e => e.changePasswordModel.ConfirmPassword, "", new { @class = "text-danger", id = "ConfirmPassError" })
 
-            
+
             <p id="changeId" style="color:red">@(Model.changePasswordModel.Error.IsEmpty() ? "" : Model.changePasswordModel.Error)</p>
 
             <button class="form-btn sx back" type="button">Back</button>
@@ -55,7 +55,8 @@
             @Html.TextBoxFor(e => e.loginModel.Password, new { @class = "password", @type = "password", @placeholder = "Insert Password" })
             @Html.ValidationMessageFor(e => e.loginModel.Password, "", new { @class = "text-danger" })
 
-            <p style="color:red">@(Model.loginModel.Error.IsEmpty() ? "" : Model.loginModel.Error)</p>
+            <p id="modelError" style="color:red">@(Model.loginModel.Error.IsEmpty() ? "" : Model.loginModel.Error)</p>
+            <p id="timeoutError" style="color:red">@(Model.loginModel.TimeoutError.IsEmpty() ? "" : Model.loginModel.TimeoutError)</p>
 
             <button class="form-btn sx resetPass" type="button">Reset Login</button>
             <button class="form-btn dx login" type="submit" name="LoginButton">Login</button>
@@ -66,11 +67,28 @@
 
 <script>
 
-    if (($("#changeId").text() !== "")) {
+    if (($("#changeId").text() !== "") || ($("#EmpIdError").text() !== "") || ($("#PasswordError").text() !== "") || ($("#NewPassError").text() !== "") || ($("#ConfirmPassError").text() !== "") ) {
         $(".changepass").addClass("active-dx");
         $(".signIn").addClass("inactive-sx");
         $(".signIn").removeClass("active-sx");
         $(".changepass").removeClass("inactive-dx");
+    }
+
+    if ($("#timeoutError").text() !== "") {
+        $(".w100").attr("disabled", "disabled");
+        $(".password").attr("disabled", "disabled");
+        $(".login").attr("disabled", "disabled");
+        setTimeout(myFunction, 10000);
+    }
+
+    function myFunction() {
+        $(".w100").removeAttr('disabled');
+        $(".password").removeAttr('disabled');
+        $(".login").removeAttr('disabled');
+        $("#timeoutError").text("");
+        $("#modelError").text("");
+        $(".w100").val("");
+        $(".password").val("");
     }
 
     //To bring the reset password form at the front

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 
+//Author : Navjit Kaur
+
 namespace Xamine.Models
 {
     public class LoginModel
@@ -17,5 +19,6 @@ namespace Xamine.Models
         public string Password { get; set; }
 
         public string Error { get; set; }
+        public string TimeoutError { get; set; }
     }
 }

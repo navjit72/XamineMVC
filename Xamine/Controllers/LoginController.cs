@@ -17,6 +17,9 @@ namespace Xamine.Controllers
         List<AdminModel> adminList;
         List<ManagerModel> managerList;
         List<ReporteeModel> reporteeList;
+        private static int adminCounter = 0;
+        private static int managerCounter = 0;
+        private static int reporteeCounter = 0;
 
         public LoginController()
         {
@@ -26,7 +29,7 @@ namespace Xamine.Controllers
             reporteeList = _context.Reportees.ToList();
         }
 
-
+        [AllowAnonymous]
         //Login action for GET request
         public ActionResult Login()
         {
@@ -52,7 +55,7 @@ namespace Xamine.Controllers
 
         //Login action for POST request
         [HttpPost]
-
+        [AllowAnonymous]
         public ActionResult Login(Login_ChangePasswordViewModel viewModel)
         {
             if (Request.Form["LoginButton"] != null)
@@ -74,15 +77,13 @@ namespace Xamine.Controllers
                             }
                             else
                             {
-
                                 viewModel.loginModel.Error = "Password Incorrect";
-
+                                adminCounter += 1;
                             }
                         }
                         else
                         {
                             viewModel.loginModel.Error = "Admin with given Id does not exist";
-
                         }
 
                     }
@@ -99,13 +100,12 @@ namespace Xamine.Controllers
                             else
                             {
                                 viewModel.loginModel.Error = "Password Incorrect";
-
+                                managerCounter += 1;
                             }
                         }
                         else
                         {
                             viewModel.loginModel.Error = "Manager with given Id does not exist";
-
                         }
                     }
                     else if (viewModel.loginModel.EmpId.ElementAt(0) == 'R')
@@ -121,23 +121,28 @@ namespace Xamine.Controllers
                             else
                             {
                                 viewModel.loginModel.Error = "Password Incorrect";
-
+                                reporteeCounter += 1;
                             }
                         }
                         else
                         {
                             viewModel.loginModel.Error = "Reportee with given Id does not exist";
-
                         }
                     }
                     else
                     {
                         viewModel.loginModel.Error = "Incorrect Id";
-
                     }
 
                 }
                 viewModel.changePasswordModel = new ChangePasswordModel();
+                if(adminCounter ==3 || managerCounter==3 || reporteeCounter== 3)
+                {
+                    adminCounter = 0;
+                    managerCounter = 0;
+                    reporteeCounter = 0;
+                    viewModel.loginModel.TimeoutError = "This account is currently locked. You will need to wait for 1 minute before it you can try logging in again";
+                }
             }
             else if (Request.Form["SaveButton"] != null)
             {

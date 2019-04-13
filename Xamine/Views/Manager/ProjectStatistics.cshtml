@@ -1,0 +1,55 @@
+﻿@*Author : Navjit Kaur*@
+@{
+    ViewBag.Title = "ProjectStatistics";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
+}
+<style>
+    h1, button{
+        margin : 5px auto;
+        text-align : center;
+    }
+    #chart_container {
+        width: 1000px;
+        height: auto;
+        margin : 100px auto;
+        text-align : center;
+    }
+</style>
+
+<div class="container-fluid">
+    <h1>Project Statistics</h1>
+    <div id="chart_container">
+        <canvas id="pie_chart"></canvas>
+    </div>
+    <div>
+        <a href="@Url.Action("UpdateProject","Manager")" class="btn btn-default">Go back</a>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var chartLabels = @Html.Raw(Json.Encode(ViewBag.LABELS));
+        var cValues = @Html.Raw(Json.Encode(ViewBag.CHARTVALUES));
+        var ctx = $("#pie_chart");
+        var pieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: "Task Assignment in Project",
+                    data: cValues,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ]
+                }]
+            },
+            
+        });
+    </script>
+    }
+
