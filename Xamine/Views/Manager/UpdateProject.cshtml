@@ -98,7 +98,8 @@
                                 url: "/Manager/DeleteProject/" + buttonRef.attr("data-project-id"),
                                 method: "POST",
                                 success: function () {
-                                    buttonRef.parents("tr").remove();
+                                    //.parents("tr").remove();
+                                    location.reload();
                                 }
                             });
                         }

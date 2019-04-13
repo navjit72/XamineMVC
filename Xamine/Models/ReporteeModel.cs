@@ -14,7 +14,7 @@ namespace Xamine.Models
     {
         public ReporteeModel()
         {
-            HoursAssigned = 0;
+            HoursAssigned = 100;
             HoursWorked = 0;
         }
 
