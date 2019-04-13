@@ -233,8 +233,43 @@ namespace Xamine.Controllers
 
 
         //Generate Project Statistics
-        public ActionResult ProjectStatistics()
+        [HttpGet]
+        public ActionResult ProjectStatistics(string id)
         {
+            ProjectModel project = _context.Projects.Include(c => c.Reportees).SingleOrDefault(p => p.ProjectId.Equals(id));
+            List<string> labels = new List<string> { "PLAN", "DESIGN", "BUILD", "TEST", "DEPLOY", "MAINTAIN" };
+            List<int> chartValues = new List<int>() {0,0,0,0,0,0 };
+            if(project.Reportees != null)
+            {
+                foreach(ReporteeModel reportee in project.Reportees)
+                {
+                    switch (reportee.TaskAssigned)
+                    {
+                        case "PLAN":
+                            chartValues[0] = reportee.HoursAssigned + chartValues.ElementAt(0);
+                            break;
+                        case "DESIGN":
+                            chartValues[1] = reportee.HoursAssigned + chartValues.ElementAt(1);
+                            break;
+                        case "BUILD":
+                            chartValues[2] = reportee.HoursAssigned + chartValues.ElementAt(2);
+                            break;
+                        case "TEST":
+                            chartValues[3] = reportee.HoursAssigned + chartValues.ElementAt(3);
+                            break;
+                        case "DEPLOY":
+                            chartValues[4] = reportee.HoursAssigned + chartValues.ElementAt(4);
+                            break;
+                        case "MAINTAIN":
+                            chartValues[5] = reportee.HoursAssigned + chartValues.ElementAt(5);
+                            break;
+                    }
+                }
+                var chartLabels = labels;
+                var cValues = chartValues;
+                ViewBag.LABELS = chartLabels;
+                ViewBag.CHARTVALUES = cValues;
+            }
             return View();
         }
 
