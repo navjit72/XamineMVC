@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 
+//Author : Navjit Kaur
+
 namespace Xamine.Models
 {
     public class LoginModel

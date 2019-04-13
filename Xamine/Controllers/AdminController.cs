@@ -110,6 +110,7 @@ namespace Xamine.Controllers
 
         }
 
+        //Partial View responding to GET requests for Update Manager
         [HttpGet]
         public ActionResult UpdateManagerPartialView(string id)
         {
@@ -118,16 +119,20 @@ namespace Xamine.Controllers
 
         }
 
+        //Partial View responding to POST requests for Update Manager
         [HttpPost]
         public ActionResult UpdateManagerPartialView(ManagerModel manager)
         {
+            //if model state is valid
             if (ModelState.IsValid)
             {
                 if (_context.Managers.ToList().Count != 0)
                 {
+                    //getting the previous details of manager
                     ManagerModel prevmanager = _context.Managers.ToList().SingleOrDefault(m => m.EmpId == manager.EmpId);
                     if (prevmanager != null)
                     {
+                        //updating with new values
                         prevmanager.Fname = manager.Fname;
                         prevmanager.Lname = manager.Lname;
                         prevmanager.Gender = manager.Gender;
@@ -137,6 +142,7 @@ namespace Xamine.Controllers
 
                     }
                 }
+                //saving changes
                 _context.SaveChanges();
 
                 //clearing the state
@@ -153,19 +159,24 @@ namespace Xamine.Controllers
             return View(_context);
         }
 
+        //Delete Manager action for POST request
         [HttpPost]
         public ActionResult DeleteManager(string id)
         {
+            // if state is valid
             if (ModelState.IsValid)
             {
                 if (_context.Managers.ToList().Count != 0)
                 {
+                    //finding the manager in database
                     ManagerModel manager = _context.Managers.ToList().SingleOrDefault(m => m.EmpId.Equals(id));
                     if (manager != null)
                     {
+                        //deleting manager from database
                         _context.Managers.Remove(manager);
                     }
                 }
+                //saving changes
                 _context.SaveChanges();
 
                 //clearing the state
@@ -175,6 +186,7 @@ namespace Xamine.Controllers
             return RedirectToAction("UpdateManager");
         }
 
+        //Partial View responding to GET requests for Update Manager
         [HttpGet]
         public ActionResult UpdateReporteePartialView(string id)
         {
@@ -183,16 +195,20 @@ namespace Xamine.Controllers
 
         }
 
+        //Partial View responding to POST requests for Update Manager
         [HttpPost]
         public ActionResult UpdateReporteePartialView(ReporteeModel reportee)
         {
+            //if model state is valid
             if (ModelState.IsValid)
             {
                 if (_context.Reportees.ToList().Count != 0)
                 {
+                    //find the reportee from database
                     ReporteeModel prevReportee = _context.Reportees.ToList().SingleOrDefault(m => m.EmpId == reportee.EmpId);
                     if (prevReportee != null)
                     {
+                        //update the values with new ones
                         prevReportee.Fname = reportee.Fname;
                         prevReportee.Lname = reportee.Lname;
                         prevReportee.Gender = reportee.Gender;
@@ -202,6 +218,7 @@ namespace Xamine.Controllers
 
                     }
                 }
+                //save changes
                 _context.SaveChanges();
 
                 //clearing the state
@@ -222,16 +239,20 @@ namespace Xamine.Controllers
         [HttpPost]
         public ActionResult DeleteReportee(string id)
         {
+            //if model state is valid
             if (ModelState.IsValid)
             {
                 if (_context.Reportees.ToList().Count != 0)
                 {
+                    //finding the reportee from database
                     ReporteeModel reportee = _context.Reportees.ToList().SingleOrDefault(m => m.EmpId.Equals(id));
                     if (reportee != null)
                     {
+                        //deleting the reportee from database
                         _context.Reportees.Remove(reportee);
                     }
                 }
+                //saving changes
                 _context.SaveChanges();
 
                 //clearing the state

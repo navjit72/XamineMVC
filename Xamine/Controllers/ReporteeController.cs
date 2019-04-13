@@ -26,6 +26,7 @@ namespace Xamine.Controllers
         //ReporteeDashboard
         public ActionResult Dashboard()
         {
+            //collecting the required values into the view model and passing it to view
             ReporteeViewModel reporteeView = new ReporteeViewModel();
             if (currentReportee == null)
                 return View(reporteeView);
@@ -37,11 +38,13 @@ namespace Xamine.Controllers
             reporteeView.ProjectModel = new ProjectModel();
             if (currentReportee.ProjectRefId != null)
             {
+                //getting the project name
                 ProjectModel project = _context.Projects.SingleOrDefault(p => p.ProjectId.Equals(currentReportee.ProjectRefId));
                 reporteeView.ProjectModel.Name = project.Name;
             }
             else
             {
+                //if no project has yet been assigned to reportee
                 reporteeView.ProjectModel.Name = "No project yet";
                 reporteeView.TaskAssigned = "N/A";
                 reporteeView.TaskPriority = "N/A";
@@ -56,8 +59,11 @@ namespace Xamine.Controllers
         {
             if (currentReportee.ProjectRefId != null)
             {
+                //previous worked hours
                 int hoursWorked = currentReportee.HoursWorked;
+                //updating with new ones
                 currentReportee.HoursWorked = hoursWorked + reporteeModel.HoursWorked;
+                //saving changes
                 _context.SaveChanges();
             }
             return RedirectToAction("Dashboard");
