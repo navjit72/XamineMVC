@@ -22,10 +22,13 @@ namespace Xamine.Controllers
             currentReportee = _context.Reportees.SingleOrDefault(r => r.EmpId.Equals(id));
         }
 
+        [CustomAuthorize]
         //ReporteeDashboard
         public ActionResult Dashboard()
         {
             ReporteeViewModel reporteeView = new ReporteeViewModel();
+            if (currentReportee == null)
+                return View(reporteeView);
             reporteeView.EmpId = currentReportee.EmpId;
             reporteeView.HoursAssigned = currentReportee.HoursAssigned;
             reporteeView.HoursWorked = currentReportee.HoursWorked;
@@ -46,7 +49,9 @@ namespace Xamine.Controllers
             return View(reporteeView);
         }
 
+        //Update daily progress of task
         [HttpPost]
+        [CustomAuthorize]
         public ActionResult UpdateDailyProgress(ReporteeViewModel reporteeModel)
         {
             if (currentReportee.ProjectRefId != null)
@@ -58,13 +63,9 @@ namespace Xamine.Controllers
             return RedirectToAction("Dashboard");
         }
 
-        //Check ratings given by the manager
-        public ActionResult Ratings()
-        {
-            return View();
-        }
 
         //Logout action
+        [AllowAnonymous]
         public ActionResult Logout()
         {
             CookieStore.RemoveCookie("EmpId");

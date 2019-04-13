@@ -210,11 +210,16 @@
     <Compile Include="Migrations\201904110207299_ManagerProjectReporteeModelUpdated-3.Designer.cs">
       <DependentUpon>201904110207299_ManagerProjectReporteeModelUpdated-3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904130137106_PasswordRulesUpdated.cs" />
+    <Compile Include="Migrations\201904130137106_PasswordRulesUpdated.Designer.cs">
+      <DependentUpon>201904130137106_PasswordRulesUpdated.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminModel.cs" />
     <Compile Include="Models\ChangePasswordModel.cs" />
     <Compile Include="Models\CookieStore.cs" />
+    <Compile Include="Models\CustomAuthorizeAttribute.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\ManagerModel.cs" />
@@ -520,6 +525,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904110207299_ManagerProjectReporteeModelUpdated-3.resx">
       <DependentUpon>201904110207299_ManagerProjectReporteeModelUpdated-3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904130137106_PasswordRulesUpdated.resx">
+      <DependentUpon>201904130137106_PasswordRulesUpdated.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -17,5 +17,6 @@ namespace Xamine.Models
         public string Password { get; set; }
 
         public string Error { get; set; }
+        public string TimeoutError { get; set; }
     }
 }

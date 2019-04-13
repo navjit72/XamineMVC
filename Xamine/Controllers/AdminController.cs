@@ -9,6 +9,7 @@ using Xamine.Models;
 
 namespace Xamine.Controllers
 {
+    [CustomAuthorize]
     public class AdminController : Controller
     {
 
@@ -23,6 +24,7 @@ namespace Xamine.Controllers
         }
 
         //Admin Dashboard
+        [AllowAnonymous]
         public ActionResult AdminDashboard()
         {
             return View(_context);
@@ -240,6 +242,7 @@ namespace Xamine.Controllers
         }
 
         //Logout action
+        [AllowAnonymous]
         public ActionResult Logout()
         {
             CookieStore.RemoveCookie("EmpId");

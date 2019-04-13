@@ -11,6 +11,7 @@ using Xamine.ViewModels;
 
 namespace Xamine.Controllers
 {
+    [CustomAuthorize]
     public class ManagerController : Controller
     {
 
@@ -32,6 +33,7 @@ namespace Xamine.Controllers
             return View(currentManager);
         }
 
+        [CustomAuthorize]
         //Add Project action for GET request
         public ActionResult AddProject()
         {
@@ -135,61 +137,6 @@ namespace Xamine.Controllers
 
         }
 
-
-        //[HttpPost]
-        //public ActionResult UpdateProjectPartialView(ProjectModel projectModel)
-        //{
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (_context.Projects.ToList().Count != 0)
-        //        {
-        //            ProjectModel prevProject = _context.Projects.Include(c=>c.Reportees).SingleOrDefault(m => m.ProjectId == projectModel.ProjectId);
-        //            List<ReporteeModel> prevReportees = prevProject.Reportees;
-        //            if (prevProject != null)
-        //            {
-        //                prevProject.Name = projectModel.Name;
-        //                prevProject.Description = projectModel.Description;
-        //                prevProject.Progress = projectModel.Progress;
-        //                prevProject.Status = projectModel.Status;
-        //                prevProject.ManagerRefId = currentManager.EmpId;
-
-        //                List<ReporteeModel> currentReportees = new List<ReporteeModel>();
-
-        //                foreach (ReporteeDataViewModel entry in reporteesAdded)
-        //                {
-        //                    ReporteeModel repor = prevReportees.SingleOrDefault(r => r.EmpId.Equals(entry.EmpId));
-        //                    repor.HoursAssigned = Convert.ToInt16(entry.HoursAssigned);
-        //                    repor.TaskAssigned = entry.TaskAssigned;
-        //                    repor.TaskPriority = entry.TaskPriority;
-        //                    currentReportees.Add(repor);
-        //                }
-
-        //                foreach (ReporteeModel reportee in prevReportees)
-        //                {
-        //                    if (currentReportees.Contains(reportee) == false)
-        //                    {
-        //                        reportee.ProjectRefId = null;
-        //                        reportee.HoursAssigned = 0;
-        //                        reportee.TaskAssigned = null;
-        //                        reportee.TaskPriority = null;
-        //                    }
-
-        //                }
-        //                prevProject.Reportees = currentReportees;
-        //            }
-        //        }
-        //        _context.SaveChanges();
-
-        //        //clearing the state
-        //        ModelState.Clear();
-
-        //        reporteesAdded.Clear();
-
-        //    }
-        //    return RedirectToAction("UpdateProject");
-        //}
-
         [HttpPost]
         public ActionResult UpdateReporteeInProject(List<ReporteeDataViewModel> jsonData)
         {
@@ -284,11 +231,6 @@ namespace Xamine.Controllers
             return RedirectToAction("UpdateProject");
         }
 
-        //Provide Ratings to reportee
-        public ActionResult RateReportee()
-        {
-            return View();
-        }
 
         //Generate Project Statistics
         public ActionResult ProjectStatistics()
@@ -303,6 +245,7 @@ namespace Xamine.Controllers
         }
 
         //Logout action
+        [AllowAnonymous]
         public ActionResult Logout()
         {
             CookieStore.RemoveCookie("EmpId");
